@@ -4,8 +4,8 @@ library(grid)
 
 # input directory and file names
 adataFile1 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/amp_survival_postwk80.csv"
-adataFile2 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/amp_cir_pool_postwk80_v2.csv"
-adataFile3 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/amp_cir_ind_postwk80_v2.csv"
+adataFile2 <- "../data/amp_cir_pool_postwk80_v2.csv"
+adataFile3 <- "../data/amp_cir_ind_postwk80_v2.csv"
 
 # output directory and file names
 pdfFileSave <- "../output/figures/amp_cuminc_postwk80_trunc.pdf"

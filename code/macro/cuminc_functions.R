@@ -1108,17 +1108,18 @@ cmpRisks <-
   nEvents <- nlevels( d[[eventVar]] ) - 1
 
   dfList <- vector("list", length=nEvents)
+  # had to change index since i==1 corresponds to state (s0)
   for ( i in 1:nEvents ) {
 
     summ.i <- data.frame(
-              eventType = summ$states[i],
+              eventType = summ$states[i+1],
               time      = summ$time,
               n.risk    = summ$n.risk[, nEvents+1],
-              n.event   = summ$n.event[, i],
-              cuminc    = summ$pstate[, i],
-              lo.cuminc = summ$lower[, i],
-              up.cuminc = summ$upper[, i],
-              se.cuminc = summ$std.err[, i],
+              n.event   = summ$n.event[, i+1],
+              cuminc    = summ$pstate[, i+1],
+              lo.cuminc = summ$lower[, i+1],
+              up.cuminc = summ$upper[, i+1],
+              se.cuminc = summ$std.err[, i+1],
               stringsAsFactors = FALSE )
     if ( Strata )
       summ.i$strata <- summ$strata

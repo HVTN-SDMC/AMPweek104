@@ -4,7 +4,7 @@ library(grid)
 
 # input directory and file names
 adataFile1 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/adata/amp_survival_wk104_tau_neut_gpdx.csv"
-adataFile3 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/amp_cir_wk104_pool_cmpriskIC80ls_2cat_trunc.csv"
+adataFile3 <- "../data/amp_cir_wk104_pool_cmpriskIC80ls_2cat_trunc.csv"
 
 # output directory and file names
 pdfFile.sens <- "../output/figures/amp_efficacy_wk104_neut_cmprskIC80_poolls_trunc_sens.pdf"

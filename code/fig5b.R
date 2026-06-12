@@ -1,7 +1,7 @@
 library(tidyverse)
 
 # generate a forest plot for the PE at week 104
-df = read.csv('/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/tables/amp_cir_efficacy_postwk80_trunc.csv')
+df = read.csv('../data/amp_cir_efficacy_postwk80_trunc.csv')
 
 # output (note, TABLE data was added to plot in illustrator)
 PLOT = '../output/figures/AMP_week80to104_cir_forest_plot_trunc.pdf'

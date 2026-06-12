@@ -7,8 +7,8 @@ source("macro/confbandsurv_2020Jan.R")
 
 # input directory and file names
 adataFile1 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/amp_survival_postwk80.csv"
-adataFile2 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/amp_cir_pool_postwk80_trunc.csv"
-adataFile3 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/amp_cir_ind_postwk80_trunc.csv"
+adataFile2 <- "../data/amp_cir_pool_postwk80_trunc.csv"
+adataFile3 <- "../data/amp_cir_ind_postwk80_trunc.csv"
 
 # output directory and file names
 csvFileSave <- c("../output/tables/amp_confbandsurv_efficacy_pool_postwk80_trunc.csv",

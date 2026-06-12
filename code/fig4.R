@@ -5,10 +5,10 @@ library(grid)
 # input directory and file names
 SURV703 = '/Volumes/trials/vaccine/p703/analysis/efficacy/adata/v703_survival.csv'
 SURV704 = '/Volumes/trials/vaccine/p704/analysis/efficacy/adata/v704_survival.csv'
-adataFile2 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/v704_cuminc_wk104_pool.csv"
-adataFile3 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/v704_cuminc_wk104_ind.csv"
-adataFile4 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/v703_cuminc_wk104_pool.csv"
-adataFile5 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/v703_cuminc_wk104_ind.csv"
+adataFile2 <- "../data/v704_cuminc_wk104_pool.csv"
+adataFile3 <- "../data/v704_cuminc_wk104_ind.csv"
+adataFile4 <- "../data/v703_cuminc_wk104_pool.csv"
+adataFile5 <- "../data/v703_cuminc_wk104_ind.csv"
 
 # output directory and file names
 pdfDir <- ""

@@ -3,7 +3,7 @@ library(ggplot2)
 library(grid)
 
 # input directory and file names
-adataFile3 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/amp_cir_wk104_pool_trunc.csv"
+adataFile3 <- "../data/amp_cir_wk104_pool_trunc.csv"
 
 # output directory and file names
 pdfFileSave <- "../output/figures/amp_efficacy_wk104_pool_trunc.pdf"
