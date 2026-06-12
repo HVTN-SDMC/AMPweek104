@@ -3,20 +3,17 @@ library(ggplot2)
 library(grid)
 
 # input directory and file names
-adataDir <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata"
-adataFile1 <- "amp_survival_postwk80.csv"
-adataFile2 <- "amp_cir_pool_postwk80_v2.csv"
-adataFile3 <- "amp_cir_ind_postwk80_v2.csv"
+adataFile1 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/amp_survival_postwk80.csv"
+adataFile2 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/amp_cir_pool_postwk80_v2.csv"
+adataFile3 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/amp_cir_ind_postwk80_v2.csv"
 
 # output directory and file names
-pdfDir <- "../output/figures"
-pdfFile <- "amp_cuminc_postwk80_trunc.pdf"
-pdfFileSave <- file.path(pdfDir, pdfFile)
+pdfFileSave <- "../output/figures/amp_cuminc_postwk80_trunc.pdf"
 
 # source input data
-surv <- read.csv(file.path(adataDir, adataFile1), stringsAsFactors = FALSE)
-cir_pool <- read.csv(file.path(adataDir, adataFile2), stringsAsFactors = FALSE)
-cir_ind <- read.csv(file.path(adataDir, adataFile3), stringsAsFactors = FALSE)
+surv <- read.csv(adataFile1, stringsAsFactors = FALSE)
+cir_pool <- read.csv(adataFile2, stringsAsFactors = FALSE)
+cir_ind <- read.csv(adataFile3, stringsAsFactors = FALSE)
 
 
 # note the infections that are past tau

@@ -2,15 +2,11 @@
 source("macro/phReg.R") 
 source("macro/cuminc_functions.R")  
 
-# data directory 
-dataDir <- "/Volumes/trials/vaccine/p704/analysis/efficacy/adata"
-tableDir <- "../output/tables"
-
 # input file name
-dataFile <- "v704_survival.csv"
+dataFile <- "/Volumes/trials/vaccine/p704/analysis/efficacy/adata/v704_survival.csv"
 
 # output file names
-CIR.csvFile_summary <- "v704_cir_efficacy_wk80.csv"
+CIR.csvFile_summary <- "../output/tables/v704_cir_efficacy_wk80.csv"
 
 # specify variables names from input dataset
 
@@ -38,7 +34,7 @@ CIR.csvFile_summary <- "v704_cir_efficacy_wk80.csv"
   cmpLvl_ind <- c("T1", "T2")
 
 # source input data and subset to get records only for MITT participants
-dat <- read.csv( file.path( dataDir, dataFile), stringsAsFactors = FALSE )
+dat <- read.csv( dataFile, stringsAsFactors = FALSE )
 mitt <- subset(dat, subset=(efficacy_flag == 1), select = c(idVar, grpVar_pool, grpVar_ind, timeVar, eventIndVar, strataVar) )
 
 # create strata weights
@@ -203,6 +199,6 @@ mitt.cox_ind_C <-
   cox.summary$pvalue <- round(cox.summary$pvalue, 4)
   cox.summary$adj.pvalue <- c(" ", pvalue.out[1], pvalue.out[2])
   
-write.csv( CIR.summary, file=file.path(tableDir, CIR.csvFile_summary), na="", row.names=FALSE, quote=FALSE)
+write.csv( CIR.summary, file=CIR.csvFile_summary, na="", row.names=FALSE, quote=FALSE)
 
 q(save = "no")

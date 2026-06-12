@@ -3,17 +3,13 @@ library(ggplot2)
 library(grid)
 
 # input directory and file names
-adataDir <- '/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata'
-adataFile3 <- "amp_cir_wk104_pool_trunc.csv"
+adataFile3 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/amp_cir_wk104_pool_trunc.csv"
 
 # output directory and file names
-pdfDir <- "../output/figures"
-pdfFile <- "amp_efficacy_wk104_pool_trunc.pdf"
-
-pdfFileSave <- file.path(pdfDir, pdfFile)
+pdfFileSave <- "../output/figures/amp_efficacy_wk104_pool_trunc.pdf"
 
 cir_pool <- 
-  read.csv(file.path(adataDir, adataFile3), stringsAsFactors = FALSE) 
+  read.csv(adataFile3, stringsAsFactors = FALSE) 
 
 # reformat 'CIR' data for plotting, taking steps to ensure plots
 # end at tau (our censoring time point) rather than the last event time

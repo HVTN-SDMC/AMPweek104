@@ -3,23 +3,20 @@ library(ggplot2)
 library(grid)
 
 # input directory and file names
-mainDataDir = "/Volumes/trials/vaccine/p704/analysis/efficacy/adata"
-adataDir <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata"
-adataFile1 <- "amp_survival_wk104_tau_neut_gpdx.csv"
-adataFile3 <- "amp_cir_wk104_pool_cmpriskIC80ls_2cat_trunc.csv"
+adataFile1 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/adata/amp_survival_wk104_tau_neut_gpdx.csv"
+adataFile3 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/amp_cir_wk104_pool_cmpriskIC80ls_2cat_trunc.csv"
 
 # output directory and file names
-pdfDir <- "../output/figures/"
-pdfFile.sens <- "amp_efficacy_wk104_neut_cmprskIC80_poolls_trunc_sens.pdf"
-pdfFile.res <- "amp_efficacy_wk104_neut_cmprskIC80_poolls_trunc_res.pdf"
+pdfFile.sens <- "../output/figures/amp_efficacy_wk104_neut_cmprskIC80_poolls_trunc_sens.pdf"
+pdfFile.res <- "../output/figures/amp_efficacy_wk104_neut_cmprskIC80_poolls_trunc_res.pdf"
 
-pdfFileSave <- file.path(pdfDir, c(pdfFile.sens, pdfFile.res))
+pdfFileSave <- c(pdfFile.sens, pdfFile.res)
 
 # source input data
-surv <- read.csv(file.path(mainDataDir, adataFile1), stringsAsFactors = FALSE)
+surv <- read.csv(adataFile1, stringsAsFactors = FALSE)
 
 cir_pool80 <- 
-  read.csv(file.path(adataDir, adataFile3), stringsAsFactors = FALSE) %>%
+  read.csv(adataFile3, stringsAsFactors = FALSE) %>%
   mutate(eventType = factor(eventType, levels=c("Sensitive", "Resistant")))
 
 

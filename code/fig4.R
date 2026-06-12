@@ -5,34 +5,32 @@ library(grid)
 # input directory and file names
 SURV703 = '/Volumes/trials/vaccine/p703/analysis/efficacy/adata/v703_survival.csv'
 SURV704 = '/Volumes/trials/vaccine/p704/analysis/efficacy/adata/v704_survival.csv'
-adataDir <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata"
-adataFile2 <- "v704_cuminc_wk104_pool.csv"
-adataFile3 <- "v704_cuminc_wk104_ind.csv"
-adataFile4 <- "v703_cuminc_wk104_pool.csv"
-adataFile5 <- "v703_cuminc_wk104_ind.csv"
+adataFile2 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/v704_cuminc_wk104_pool.csv"
+adataFile3 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/v704_cuminc_wk104_ind.csv"
+adataFile4 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/v703_cuminc_wk104_pool.csv"
+adataFile5 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/v703_cuminc_wk104_ind.csv"
 
 # output directory and file names
-pdfDir <- "../output/figures"
-pdfFile <- c("v704_cuminc_wk104_foot.pdf", 
-             "v703_cuminc_wk104_foot.pdf")
-pdfFileSave <- file.path(pdfDir, pdfFile)
+pdfDir <- ""
+pdfFileSave <- c("../output/figures/v704_cuminc_wk104_foot.pdf", 
+                 "../output/figures/v703_cuminc_wk104_foot.pdf")
 
 # source input data
-cuminc_pool_704 <- read.csv(file.path(adataDir, adataFile2), stringsAsFactors = FALSE) %>%
+cuminc_pool_704 <- read.csv(adataFile2, stringsAsFactors = FALSE) %>%
   filter(rx_pool == 'T1+T2') %>% # Placebo data is also in the individual file
   rename(level=rx_pool) %>%
   mutate(protocol='HVTN 704') %>%
   dplyr::select(protocol, level, time, cuminc, n.risk, n.event)
-cuminc_ind_704 <- read.csv(file.path(adataDir, adataFile3), stringsAsFactors = FALSE) %>%
+cuminc_ind_704 <- read.csv(adataFile3, stringsAsFactors = FALSE) %>%
   rename(level=rx_code) %>%
   mutate(protocol='HVTN 704') %>%
   dplyr::select(protocol, level, time, cuminc, n.risk, n.event)
-cuminc_pool_703 <- read.csv(file.path(adataDir, adataFile4), stringsAsFactors = FALSE) %>%
+cuminc_pool_703 <- read.csv(adataFile4, stringsAsFactors = FALSE) %>%
   filter(rx_pool == 'T1+T2') %>% # Placebo data is also in the individual file
   rename(level=rx_pool) %>%
   mutate(protocol='HVTN 703') %>%
   dplyr::select(protocol, level, time, cuminc, n.risk, n.event)
-cuminc_ind_703 <- read.csv(file.path(adataDir, adataFile5), stringsAsFactors = FALSE) %>%
+cuminc_ind_703 <- read.csv(adataFile5, stringsAsFactors = FALSE) %>%
   rename(level=rx_code) %>%
   mutate(protocol='HVTN 703') %>%
   dplyr::select(protocol, level, time, cuminc, n.risk, n.event)

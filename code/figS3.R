@@ -6,30 +6,25 @@ library(grid)
 source("macro/confbandsurv_2020Jan.R") 
 
 # input directory and file names
-adataDir <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking//adata"
-adataFile1 <- "amp_survival_postwk80.csv"
-adataFile2 <- "amp_cir_pool_postwk80_trunc.csv"
-adataFile3 <- "amp_cir_ind_postwk80_trunc.csv"
+adataFile1 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/amp_survival_postwk80.csv"
+adataFile2 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/amp_cir_pool_postwk80_trunc.csv"
+adataFile3 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/amp_cir_ind_postwk80_trunc.csv"
 
 # output directory and file names
-csvDir <- "../output/tables/"
-csvFile <- c("amp_confbandsurv_efficacy_pool_postwk80_trunc.csv",
-             "amp_confbandsurv_efficacy_high_postwk80_trunc.csv",
-             "amp_confbandsurv_efficacy_low_postwk80_trunc.csv")
-csvFileSave <- file.path(csvDir, csvFile)
+csvFileSave <- c("../output/tables/amp_confbandsurv_efficacy_pool_postwk80_trunc.csv",
+                 "../output/tables/amp_confbandsurv_efficacy_high_postwk80_trunc.csv",
+                 "../output/tables/amp_confbandsurv_efficacy_low_postwk80_trunc.csv")
 
-pdfDir <- "../output/figures/"
-pdfFile <- c("amp_efficacy_pool_postwk80_trunc_supp.pdf", 
-             "amp_efficacy_high_postwk80_trunc_supp.pdf",
-             "amp_efficacy_low_postwk80_trunc_supp.pdf")
-pdfFileSave <- file.path(pdfDir, pdfFile)
+pdfFileSave <- c("../output/figures/amp_efficacy_pool_postwk80_trunc_supp.pdf", 
+                 "../output/figures/amp_efficacy_high_postwk80_trunc_supp.pdf",
+                 "../output/figures/amp_efficacy_low_postwk80_trunc_supp.pdf")
 
 # source input data and divide 'surv' into three datasets to obtain simultaneous
 # bounds for each of the comparisons of interest 
-surv <- read.csv(file.path(adataDir, adataFile1), stringsAsFactors = FALSE) %>%
+surv <- read.csv(adataFile1, stringsAsFactors = FALSE) %>%
   mutate(fudays_postwk80 = pmin(24*7, fudays_postwk80)) # use truncated survival 
-cir_pool <- read.csv(file.path(adataDir, adataFile2), stringsAsFactors = FALSE)
-cir_ind <- read.csv(file.path(adataDir, adataFile3), stringsAsFactors = FALSE)
+cir_pool <- read.csv(adataFile2, stringsAsFactors = FALSE)
+cir_ind <- read.csv(adataFile3, stringsAsFactors = FALSE)
 
     surv_pool <- 
       surv %>%

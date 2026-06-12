@@ -2,15 +2,11 @@
 source("macro/phReg.R") 
 source("macro/cuminc_functions.R")  
 
-# data directory 
-dataDir <- "/Volumes/trials/vaccine/p703/analysis/efficacy/adata"
-tableDir <- "../output/tables"
-
 # input file name
-dataFile <- "v703_survival.csv"
+dataFile <- "/Volumes/trials/vaccine/p703/analysis/efficacy/adata/v703_survival.csv"
 
 # output file names
-CIR.csvFile_summary_trunc <- "v703_cir_efficacy_wk104_trunc.csv"
+CIR.csvFile_summary_trunc <- "../output/tables/v703_cir_efficacy_wk104_trunc.csv"
 
 # specify variables names from input dataset
 
@@ -39,7 +35,7 @@ CIR.csvFile_summary_trunc <- "v703_cir_efficacy_wk104_trunc.csv"
   cmpLvl_ind <- c("T1", "T2")
 
 # source input data and subset to get records only for MITT participants
-dat <- read.csv( file.path( dataDir, dataFile), stringsAsFactors = FALSE )
+dat <- read.csv( dataFile, stringsAsFactors = FALSE )
 mitt <- subset(dat, subset=(efficacy_flag == 1), select = c(idVar, grpVar_pool, grpVar_ind, timeVar, eventIndVar, strataVar) )
 
 # create strata weights
@@ -185,7 +181,7 @@ pvalue.out <- round(p.adjust(pvalue.in, method="holm"), 4) #T1 then T2
 CIR.summary_trunc$adj.pvalue <- c(" ", pvalue.out[2], pvalue.out[1])
 
 # output PE estimate on truncated data
-write.csv( CIR.summary_trunc, file=file.path(tableDir, CIR.csvFile_summary_trunc), na="", row.names=FALSE, quote=FALSE)
+write.csv( CIR.summary_trunc, file=CIR.csvFile_summary_trunc, na="", row.names=FALSE, quote=FALSE)
 
 
 q(save = "no")

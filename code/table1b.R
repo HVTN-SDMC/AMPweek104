@@ -3,15 +3,15 @@ source("macro/phReg.R")
 source("macro/cuminc_functions.R")  
 
 # data directory 
-dataDir <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata"
-tableDir <- "../output/tables"
+dataDir <- ""
+tableDir <- ""
 
 # input file name
-dataFile <- "amp_survival_postwk80.csv"
+dataFile <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/amp_survival_postwk80.csv"
 
 # output file names
-CIR.csvFile_summary_703 <- "v703_cir_efficacy_postwk80_trunc.csv"
-CIR.csvFile_summary_704 <- "v704_cir_efficacy_postwk80_trunc.csv"
+CIR.csvFile_summary_703 <- "../output/tables/v703_cir_efficacy_postwk80_trunc.csv"
+CIR.csvFile_summary_704 <- "../output/tables/v704_cir_efficacy_postwk80_trunc.csv"
 
 # specify variables names from input dataset
 
@@ -47,11 +47,11 @@ for( trial_name in c('v703', 'v704') ) {
 
   # source input data and subset to get records only for MITT participants
   if( trial_name=='v703') {
-    dat <- read.csv( file.path( dataDir, dataFile), stringsAsFactors = FALSE )
+    dat <- read.csv( dataFile, stringsAsFactors = FALSE )
     dat <- subset(dat, protocol=='HVTN 703')
     mitt <- subset(dat, subset=(efficacy_flag == 1), select = c(idVar, grpVar_pool, grpVar_ind, timeVar, eventIndVar, strataVar))
   } else {
-    dat <- read.csv( file.path( dataDir, dataFile), stringsAsFactors = FALSE )
+    dat <- read.csv( dataFile, stringsAsFactors = FALSE )
     dat <- subset(dat, protocol=='HVTN 704')
     mitt <- subset(dat, subset=(efficacy_flag == 1), select = c(idVar, grpVar_pool, grpVar_ind, timeVar, eventIndVar, strataVar))
   }
@@ -155,7 +155,7 @@ for( trial_name in c('v703', 'v704') ) {
     CIR.summary$adj.pvalue <- c(" ", pvalue.out[2], pvalue.out[1])
     
 
-  write.csv( CIR.summary, file=file.path(tableDir, CIR.csvFile_summary), na="", row.names=FALSE, quote=FALSE)
+  write.csv( CIR.summary, file=CIR.csvFile_summary, na="", row.names=FALSE, quote=FALSE)
 }  
 
 q(save = "no")
