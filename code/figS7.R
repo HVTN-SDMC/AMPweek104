@@ -13,9 +13,7 @@ nabFile704 <- "/Volumes/trials/vaccine/p704/s670/qdata/VTN704_breakthrough_NAb_2
 nabFile703 <- "/Volumes/trials/vaccine/p703/s573/qdata/VTN703_breakthrough_NAb_20200722.txt"
 
 # output directory and file names
-pdfDir <- "../output/figures"
-pdfFile <- c("amp_ic80ls_over_time_wk104.pdf")
-pdfFileSave <- file.path(pdfDir, pdfFile)
+pdfFileSave <- "../output/figures/amp_ic80ls_over_time_wk104.pdf"
 
 # source input data
 surv <- read.csv(adataFile1, stringsAsFactors = FALSE)
