@@ -9,4 +9,4 @@ check_paths.R
 data/
 data_file_list.txt
 DataFileSummary.R
-.DS_Store
+**/.DS_Store
