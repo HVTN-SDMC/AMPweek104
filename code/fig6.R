@@ -39,7 +39,7 @@ dataWk104$gmt80ls2[!is.na(dataWk104$gmt80ls) & 10^dataWk104$gmt80ls>=100] <- log
 
 # four intermediate-to-resistant viruses, all in the VRC01 groups, that were diagnosed at the Week 96 or 104 blood draw
 df <- filter(dataWk104, tx_pool!="C3" & (hiv1fpday>700) & !is.na(gmt80ls) & gmt80ls > 1)
-df <- dplyr::select(df, all_of(c("protocol", "pub_id","tx", "hiv1survday","hiv1fpday", "hiv1event", "gmt80ls",  "stratVar")))
+df <- dplyr::select(df, all_of(c("protocol","tx", "hiv1fpday", "hiv1event", "gmt80ls",  "stratVar")))
 
 
 #For sensitive viruses

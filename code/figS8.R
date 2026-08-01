@@ -131,9 +131,9 @@ dataWk104$gmt80ls <- as.numeric(dataWk104$gmt80ls)
 dataWk104$gmt80ls <- log10(dataWk104$gmt80ls)
 
 escapeMark <- read.csv(file.path(datDir, "VRC01escape.DescFile.csv"))
-dataWk104 <- left_join(dataWk104, escapeMark, by = "pub_id")
 dataWk104$ntx <- ifelse(dataWk104$tx == "C3", "Placebo", ifelse(dataWk104$tx == "T1", "VRC01 10 mg/kg", "VRC01 30 mg/kg"))
 dataWk104$epitope.dist.subtype.ls <- ifelse(dataWk104$protocol == "HVTN 703", dataWk104$epitope.dist.c.ls, dataWk104$epitope.dist.b.ls)
+dataWk104 <- left_join(dataWk104, escapeMark, by = "pub_id")
 
 
 # For each quantitative mark, use Juraska et al 2013 method to fit the model and plot the PE by mark curve
