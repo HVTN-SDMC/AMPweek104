@@ -35,7 +35,7 @@ for(week in c(80, 104)){
                                 protocol=="HVTN 703" & southAfrica==0 ~ "703notSAf"))
     #read in VRC01 serum concentration trajectories for all noncases (82 pubids) in the MITT Case-Control Cohort
     dat_est_daily_ctl <- read.csv(file.path(datDir, "dat_est_daily_82Ctl_wk112.csv"))
-    colnames(dat_est_daily_ctl) <- c("time", "Cc","pub_id")
+    colnames(dat_est_daily_ctl) <- c("time", "cc","pub_id")
     dat_est_daily_ctl <- left_join(dat_est_daily_ctl, week80visits, by = "pub_id")
     
    
@@ -51,7 +51,7 @@ for(week in c(80, 104)){
                                 protocol=="HVTN 703" & southAfrica==0 ~ "703notSAf"))
     #read in VRC01 serum concentration trajectories for all noncases (82 pubids) in the MITT Case-Control Cohort
     dat_est_daily_ctl <- read.csv(file.path(datDir, "dat_est_daily_82Ctl_wk112.csv"))
-    colnames(dat_est_daily_ctl) <- c("time", "Cc","pub_id")
+    colnames(dat_est_daily_ctl) <- c("time", "cc","pub_id")
     dat_est_daily_ctl <- left_join(dat_est_daily_ctl, week80visits, by = "pub_id")
     dat_est_daily_ctl <- filter(dat_est_daily_ctl, time <= week80VisitTime)
     
@@ -82,11 +82,11 @@ for(week in c(80, 104)){
   
   dat_ID80_daily_ctl_704 <- filter(dat_est_daily_ctl, pub_id %in% pubid_704) %>%
     cross_join(filter(dat_ic80_placebo, study == "HVTN 704/HPTN 085")) %>%
-    mutate(ID80=Cc/ic80)
+    mutate(ID80=cc/ic80)
   
   dat_ID80_daily_ctl_703 <- filter(dat_est_daily_ctl, pub_id %in% pubid_703) %>%
     cross_join(filter(dat_ic80_placebo, study == "HVTN 703/HPTN 081")) %>%
-    mutate(ID80=Cc/ic80)
+    mutate(ID80=cc/ic80)
   
   dat_ID80_daily_ctl <- rbind(dat_ID80_daily_ctl_704, dat_ID80_daily_ctl_703)
   
@@ -222,7 +222,7 @@ for(week in c(80, 104)){
   #####################################################################################
   #a single plot for pooled trials
   dat_ID80_daily_ctl <- dat_est_daily_ctl %>%cross_join(dat_ic80_placebo) %>%
-    mutate(ID80=Cc/ic80)
+    mutate(ID80=cc/ic80)
   #add median PT80 for trials pooled and dose pooled
   if(week == 104){
     for(f in c("Weeks 0-80", "Weeks 80-104")){
