@@ -1,39 +1,47 @@
+library(here)
+here::i_am("README.md")
+repoDir <- here::here()
+
+outDatDir <- file.path(repoDir, "data")
+datDir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data" # file.path(repoDir, "data")
+macroDir <- file.path(repoDir, 'code/macro')
+
 # load macros
-source("macro/phReg.R") 
-source("macro/cuminc_functions.R")  
+source(file.path(macroDir, "phReg.R")) 
+source(file.path(macroDir, "cuminc_functions.R"))
 
 # input file name
-dataFile <- "/Volumes/trials/vaccine/p704/analysis/efficacy/adata/amp_survival.csv"
+dataFile <- file.path(datDir, "amp_survival.csv")
 
 # output file names
-CIR.csvFile_pool_trunc  <- "../data/amp_cir_wk104_pool_trunc.csv"
+CIR.csvFile_pool_trunc  <- file.path(outDatDir, "amp_cir_wk104_pool_trunc.csv")
 
 # specify variables names from input dataset
 
-  # groupings to be compared
-  grpVar_pool  <- "rx_pool"
-  grpVar_ind <- "rx_code"
+# groupings to be compared
+grpVar_pool  <- "rx_pool"
+grpVar_ind <- "rx_code"
 
-  # follow-up time information
-  timeVar <- "fudayswk104"
-  timeVar_trunc <- "fudayswk104_trunc"
-  
-  # event indicator
-  eventIndVar <- "statuswk104"
+# follow-up time information
+timeVar <- "fudayswk104"
+timeVar_trunc <- "fudayswk104_trunc"
 
-  # unique identifier
-  idVar <- "ptid"
-  
-  # the strata variable
-  strataVar_pool <- "prot_rx"
-  strataVar_ind <- "protocol"
+# event indicator
+eventIndVar <- "statuswk104"
 
-  # reference level of your group variable
-  refLvl <- "C3"
+# unique identifier
+idVar <- "pub_id"
 
-  # comparison level of your group variable
-  cmpLvl_pool <- c("T1+T2")
-  cmpLvl_ind <- c("T1", "T2")
+# the strata variable
+strataVar_pool <- "prot_rx"
+strataVar_ind <- "protocol"
+
+# reference level of your group variable
+refLvl <- "C3"
+
+# comparison level of your group variable
+cmpLvl_pool <- c("T1+T2")
+cmpLvl_ind <- c("T1", "T2")
 
 # source input data and subset to get records only for MITT participants
 dat <- read.csv( dataFile, stringsAsFactors = FALSE )

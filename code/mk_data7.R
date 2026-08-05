@@ -1,39 +1,47 @@
+library(here)
+here::i_am("README.md")
+repoDir <- here::here()
+
+outDatDir <- file.path(repoDir, "data")
+datDir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data" # file.path(repoDir, "data")
+macroDir <- file.path(repoDir, 'code/macro')
+
 # load macros
-source("macro/phReg.R") 
-source("macro/cuminc_functions.R")  
+source(file.path(macroDir, "phReg.R")) 
+source(file.path(macroDir, "cuminc_functions.R"))
 
 # input file name
-dataFile <- "/Volumes/trials/vaccine/p704/analysis/efficacy/adata/v704_survival.csv"
+dataFile <- file.path(datDir, "v704_survival.csv")
 
 # output file names
-cuminc.csvFile_pool <- "../data/v704_cuminc_wk104_pool.csv"
-cuminc.csvFile_ind  <- "../data/v704_cuminc_wk104_ind.csv"
+cuminc.csvFile_pool <- file.path(outDatDir, "v704_cuminc_wk104_pool.csv")
+cuminc.csvFile_ind  <- file.path(outDatDir, "v704_cuminc_wk104_ind.csv")
 
 # specify variables names from input dataset
 
-  # groupings to be compared
-  grpVar_pool  <- "rx_pool"
-  grpVar_ind <- "rx_code"
+# groupings to be compared
+grpVar_pool  <- "rx_pool"
+grpVar_ind <- "rx_code"
 
-  # follow-up time information
-  timeVar <- "fudayswk104"
-  timeVar_trunc <- "fudayswk104_trunc"
-  
-  # event indicator
-  eventIndVar <- "statuswk104"
+# follow-up time information
+timeVar <- "fudayswk104"
+timeVar_trunc <- "fudayswk104_trunc"
 
-  # unique identifier
-  idVar <- "ptid"
-  
-  # the strata variable
-  strataVar <- "rx_code"
+# event indicator
+eventIndVar <- "statuswk104"
 
-  # reference level of your group variable
-  refLvl <- "C3"
+# unique identifier
+idVar <- "pub_id"
 
-  # comparison level of your group variable
-  cmpLvl_pool <- c("T1+T2")
-  cmpLvl_ind <- c("T1", "T2")
+# the strata variable
+strataVar <- "rx_code"
+
+# reference level of your group variable
+refLvl <- "C3"
+
+# comparison level of your group variable
+cmpLvl_pool <- c("T1+T2")
+cmpLvl_ind <- c("T1", "T2")
 
 # source input data and subset to get records only for MITT participants
 dat <- read.csv( dataFile, stringsAsFactors = FALSE )
