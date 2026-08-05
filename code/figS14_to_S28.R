@@ -49,15 +49,15 @@ plotdf <- tibble("trial" = character(),"cohort" = character(), "tx" = character(
 #calculate the number/percentage of endpoints with resistant/neutral/sensitive features
 for(trial in c("703", "704", "703and704")){
   if(trial == "703"){
-    df0 <- filter(escapeDesc, Protocol == "V703")
+    df0 <- filter(escapeDesc, protocol == "V703")
   }else if (trial == "704"){
-    df0 <- filter(escapeDesc, Protocol == "V704")
+    df0 <- filter(escapeDesc, protocol == "V704")
   }else{
     df0 <- escapeDesc
   }
   for(c in c("Weeks 0 to 80", "Weeks 80 to 104")){
     for(x in c("C3", "T1", "T2")){
-      df1 <- filter(df0, Tx == x & cohort == c)
+      df1 <- filter(df0, tx == x & cohort == c)
       
       for(f in features){
         dfsummary <- table(df1[, f])

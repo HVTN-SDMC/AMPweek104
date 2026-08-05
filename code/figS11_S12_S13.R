@@ -70,15 +70,13 @@ dataWk104$gmt80ls <- log10(dataWk104$gmt80ls)
 
 
 escapeMark <- read.csv(file.path(datDir, "VRC01escape.DescFile.csv"))
-dataWk104 <- left_join(dataWk104, escapeMark, by = "pub_id")
 dataWk104$ntx <- ifelse(dataWk104$tx == "C3", "Placebo", ifelse(dataWk104$tx == "T1", "VRC01, low dose", "VRC01, high dose"))
-
 dataWk104$epitope.dist.subtype.ls <- ifelse(dataWk104$protocol == "HVTN 703", dataWk104$epitope.dist.c.ls, dataWk104$epitope.dist.b.ls)
-dataWk104$resmark_sens_tbl2 <- 27 - dataWk104$resmark_sens_tbl2
+dataWk104 <- left_join(dataWk104, escapeMark, by = c("pub_id", "protocol", "tx"))
+
 #boxplots and violin plots comparing continuous marks
 quantMarks <- c("parscore1.ls","parscore2.ls", "gmt80ls", "epitope.dist.subtype.ls", 
-                "hdist.zspace.sites.preselect.all.ls", 
-                "hdist.zspace.sites.binding.all.ls", "resmark_sens_tbl2", "resmark_comb_tbl2")
+                "hdist.zspace.sites.binding.all.ls",  "resmark_comb_tbl2")
 
 # parscore1.xx: logit predicted probability IC80 >= 1 ug/ml
 # parscore2.xx: log base 10 predicted IC80 (ug/ml)
@@ -88,7 +86,7 @@ quantMarks <- c("parscore1.ls","parscore2.ls", "gmt80ls", "epitope.dist.subtype.
 # hdist.zspace.sites.binding.all.ls: PC-weighted HD in the VRC01/CD4 binding set
 
 markFileString <- c("logitPredProbResIC80_ls", "log10predIC80_ls", "IC80_ls", "epitopeDist_ls", 
-                    "hdist_ls", "hdist_CD4binding_ls", "resmark_sens_tbl2", "resmark_comb_tbl2")
+                     "hdist_CD4binding_ls", "resmark_comb_tbl2")
 
 yLabels <- c(expression("Predicted Probability of" ~ IC[80] > 1 ~ mu * "g/ml"), expression("Predicted" ~ IC[80] ~ "(" * mu * "g/ml)"),
              expression(IC[80] ~ "(" * mu * "g/ml)"), "VRC01 Epitope Distance to\n Subtype-Specific Reference", 
