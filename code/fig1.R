@@ -15,7 +15,8 @@ library(plyr)
 
 #read in week 80 visit times for all noncases (82 pubids) in the MITT Case-Control Cohort
 week80visits <- read.csv(file.path(datDir, "dat_ctl_wk80_time.csv"))[, c(1,2)]
-colnames(week80visits) <- c("week80VisitTime", "pub_id")
+#rename column `time` to week80VisitTime
+names(week80visits)[names(week80visits) == "time"] <- "week80VisitTime"
 
 #set up tibbles for estimated xx% of exposures with PT80 < 10, >100 over week 0-xx
 exposure_perc <- tibble("Protocol" = character(), "Follow-up" = character(), "Dose" = character(), "PT80_category" = character(), "Perc" = numeric())
@@ -35,7 +36,6 @@ for(week in c(80, 104)){
                                 protocol=="HVTN 703" & southAfrica==0 ~ "703notSAf"))
     #read in VRC01 serum concentration trajectories for all noncases (82 pubids) in the MITT Case-Control Cohort
     dat_est_daily_ctl <- read.csv(file.path(datDir, "dat_est_daily_82Ctl_wk112.csv"))
-    colnames(dat_est_daily_ctl) <- c("time", "cc","pub_id")
     dat_est_daily_ctl <- left_join(dat_est_daily_ctl, week80visits, by = "pub_id")
     
    
@@ -51,7 +51,6 @@ for(week in c(80, 104)){
                                 protocol=="HVTN 703" & southAfrica==0 ~ "703notSAf"))
     #read in VRC01 serum concentration trajectories for all noncases (82 pubids) in the MITT Case-Control Cohort
     dat_est_daily_ctl <- read.csv(file.path(datDir, "dat_est_daily_82Ctl_wk112.csv"))
-    colnames(dat_est_daily_ctl) <- c("time", "cc","pub_id")
     dat_est_daily_ctl <- left_join(dat_est_daily_ctl, week80visits, by = "pub_id")
     dat_est_daily_ctl <- filter(dat_est_daily_ctl, time <= week80VisitTime)
     
