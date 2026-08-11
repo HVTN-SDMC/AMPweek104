@@ -69,7 +69,7 @@ dataWk104$gmt80ls <- as.numeric(dataWk104$gmt80ls)
 dataWk104$gmt80ls <- log10(dataWk104$gmt80ls)
 
 
-escapeMark <- read.csv(file.path(datDir, "VRC01escape.DescFile.csv"))
+escapeMark <- read.csv(file.path(datDir, "VRC01escape_DescFile.csv"))
 dataWk104$ntx <- ifelse(dataWk104$tx == "C3", "Placebo", ifelse(dataWk104$tx == "T1", "VRC01, low dose", "VRC01, high dose"))
 dataWk104$epitope.dist.subtype.ls <- ifelse(dataWk104$protocol == "HVTN 703", dataWk104$epitope.dist.c.ls, dataWk104$epitope.dist.b.ls)
 dataWk104 <- left_join(dataWk104, escapeMark, by = c("pub_id", "protocol", "tx"))

@@ -32,7 +32,7 @@ dataPostWk80 <- read.csv(file.path(datDir, "d_wk80_wk104_survival_dataset_sieve.
 dataWk80_cases <- filter(dataWk80, hiv1event == 1)
 dataPostWk80_cases <- filter(dataPostWk80, hiv1event == 1)
 
-escapeDesc <- read.csv(file.path(datDir, "VRC01escape.DescFile.csv"))
+escapeDesc <- read.csv(file.path(datDir, "VRC01escape_DescFile.csv"))
 escapeDesc <- filter(escapeDesc, pub_id%in% c(dataWk80_cases$pub_id, dataPostWk80_cases$pub_id))
 escapeDesc$cohort <- ifelse(escapeDesc$pub_id %in% dataWk80_cases$pub_id, "Weeks 0 to 80", "Weeks 80 to 104")
 

@@ -69,7 +69,7 @@ mean(dataPostWk80_cases$num.pngs.v5.ls[dataPostWk80_cases$tx_pool=="T1+T2"])
 mean(dataPostWk80_cases$num.pngs.v5.ls[dataPostWk80_cases$tx_pool=="C3"])
 
 
-escapeDesc <- read.csv(file.path(datDir, "VRC01escape.DescFile.csv"))
+escapeDesc <- read.csv(file.path(datDir, "VRC01escape_DescFile.csv"))
 escapeDesc <- filter(escapeDesc, pub_id%in% c(dataWk80_cases$pub_id, dataPostWk80_cases$pub_id))
 escapeDesc$cohort <- ifelse(escapeDesc$pub_id %in% dataWk80_cases$pub_id, "Weeks 0 to 80", "Weeks 80 to 104")
 
