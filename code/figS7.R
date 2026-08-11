@@ -37,7 +37,7 @@ nab3 <- read.csv(nabFile703, sep="\t")
 
 nab <-
   rbind(nab3, nab4) %>%
-  rename(pub_id=isolate_pubid, visitno=isolate_visitno, drawdy=isolate_drawdt) %>%
+  rename(pub_id=isolate_pubid, drawdy=isolate_drawdt) %>%
   arrange(pub_id, drawdy) %>%
   distinct(pub_id, .keep_all=TRUE) %>%
   select(pub_id, drawdy)
