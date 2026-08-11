@@ -52,7 +52,7 @@ dbs_pilot = read.csv(dataDBS3, sep='\t')
 dbs = rbind(dbs, dbs_monitor, dbs_pilot)
 
 dbs = dbs %>% 
-  select("pub_id","visitno","drawdy", "concentration","concentration_units","analyte","lloq","concentration_oor_indicator") %>%
+  select("pub_id","visitno","drawdy", "concentration","concentration_units","analyte","concentration_oor_indicator") %>%
   filter(analyte=="TFV-DP")
 dbs$detectable = as.numeric(!is.na(dbs$concentration) & dbs$concentration_oor_indicator!=LLOQ)
 dbs$effective  = as.numeric(!is.na(dbs$concentration) & dbs$concentration >= EFFECTIVE_CUTOFF)
