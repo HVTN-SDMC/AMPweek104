@@ -2,13 +2,20 @@ library(dplyr)
 library(ggplot2)
 library(grid)
 
+library(here)
+here::i_am("README.md")
+repoDir <- here::here()
+datDir <- file.path(repoDir, "data")
+dat2Dir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data" # file.path(repoDir, "data")
+figDir <- file.path(repoDir, "output/figures")
+
 # input directory and file names
-adataFile1 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/amp_survival_postwk80.csv"
-adataFile2 <- "../data/amp_cir_pool_postwk80_v2.csv"
-adataFile3 <- "../data/amp_cir_ind_postwk80_v2.csv"
+adataFile1 <- file.path(dat2Dir, "amp_survival_postwk80.csv")
+adataFile2 <- file.path(datDir, "amp_cir_pool_postwk80_v2.csv")
+adataFile3 <- file.path(datDir, "amp_cir_ind_postwk80_v2.csv")
 
 # output directory and file names
-pdfFileSave <- "../output/figures/amp_cuminc_postwk80_trunc.pdf"
+pdfFileSave <- file.path(figDir, "amp_cuminc_postwk80_trunc.pdf")
 
 # source input data
 surv <- read.csv(adataFile1, stringsAsFactors = FALSE)

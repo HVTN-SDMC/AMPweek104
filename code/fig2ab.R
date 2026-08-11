@@ -2,13 +2,20 @@ library(dplyr)
 library(ggplot2)
 library(grid)
 
+library(here)
+here::i_am("README.md")
+repoDir <- here::here()
+datDir <- file.path(repoDir, "data")
+dat2Dir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data" # file.path(repoDir, "data")
+figDir <- file.path(repoDir, "output/figures")
+
 # input directory and file names
-adataFile1 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/adata/amp_survival_wk104_tau_neut_gpdx.csv"
-adataFile3 <- "../data/amp_cir_wk104_pool_cmpriskIC80ls_2cat_trunc.csv"
+adataFile1 <- file.path(dat2Dir, "amp_survival_wk104_tau_neut_gpdx.csv")
+adataFile3 <- file.path(datDir, "amp_cir_wk104_pool_cmpriskIC80ls_2cat_trunc.csv")
 
 # output directory and file names
-pdfFile.sens <- "../output/figures/amp_efficacy_wk104_neut_cmprskIC80_poolls_trunc_sens.pdf"
-pdfFile.res <- "../output/figures/amp_efficacy_wk104_neut_cmprskIC80_poolls_trunc_res.pdf"
+pdfFile.sens <- file.path(figDir, "amp_efficacy_wk104_neut_cmprskIC80_poolls_trunc_sens.pdf")
+pdfFile.res <- file.path(figDir, "amp_efficacy_wk104_neut_cmprskIC80_poolls_trunc_res.pdf")
 
 pdfFileSave <- c(pdfFile.sens, pdfFile.res)
 

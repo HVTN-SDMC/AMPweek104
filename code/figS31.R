@@ -1,42 +1,46 @@
 library(tidyverse)
 library(lubridate)
 
+library(here)
+here::i_am("README.md")
+repoDir <- here::here()
+macroDir <- file.path(repoDir, "code/macro")
+datDir <- file.path(repoDir, "data")
+dat2Dir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data" # file.path(repoDir, "data")
+figDir <- file.path(repoDir, "output/figures")
+tabDir <- file.path(repoDir, "output/tables")
+
 # data files
-dataFile704 = '/Volumes/trials/vaccine/p704/analysis/efficacy/adata/v704_survival_wk80_tau_neut.csv'
-dataDX = '/Volumes/trials/vaccine/p704/analysis/efficacy/adata/amp_diagnostic_trajectories.csv'
-dataIDT704 = '/Volumes/trials/vaccine/p704/analysis/dsmb/2020_08/closed/adata/v704_infusion_dates.csv'
-dataDBS1 = '/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/qdata/VTN704_case_control_DBS01UC20200715E001.txt'
-dataDBS2 = '/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/qdata/VTN704_DBS01_20210521.txt'
-dataDBS3 = '/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/qdata/VTN704_DBS01_PILOT_UC_20181114.txt'
+dataFile704 = file.path(dat2Dir, 'v704_survival_wk80_tau_neut.csv')
+dataDX = file.path(dat2Dir, 'amp_diagnostic_trajectories.csv')
+dataIDT704 = file.path(dat2Dir, 'v704_infusion_dates.csv')
+dataDBS1 = file.path(dat2Dir, 'VTN704_case_control_DBS01UC20200715E001.txt')
+dataDBS2 = file.path(dat2Dir, 'VTN704_DBS01_20210521.txt')
+dataDBS3 = file.path(dat2Dir, 'VTN704_DBS01_PILOT_UC_20181114.txt')
+
+pdfFileSave = file.path(figDir, 'dbs_704primary_cases.pdf')
+tabFileSave = file.path(tabDir, 'dbs_prep_use_estimates_704cases_week0to80.csv')
 
 dat = read.csv(dataFile704)
 dat$southAmerica = NULL
-dat = subset(dat, select=c('ptid','hiv1event','protocol','tx'))
+dat = subset(dat, select=c('pub_id','hiv1event','protocol','tx'))
 
-case_ids = subset(dat, protocol=='HVTN 704' & hiv1event==1)$ptid
+case_ids = subset(dat, protocol=='HVTN 704' & hiv1event==1)$pub_id
 
 dx = read.csv(dataDX)
-dx$dxdt = ymd(dx$dxdt)
-dx = dx %>% select(ptid, dxdt) %>% unique()
+dx = dx %>% select(pub_id, dxdy) %>% unique()
 
 # infusion dates
 idt = read.csv(dataIDT704)
-idt$ptid = as.integer(gsub('-','',idt$pt))
 idt$inf.number = as.numeric(factor(idt$visit))
-idt$idt = as.Date(idt$idt, '%d/%m/%Y')
 
 # compute number of days between infusion and enrollment (ie, first infusion)
 idt = idt %>% 
-  group_by(ptid) %>% 
+  group_by(pub_id) %>% 
   arrange(idt) %>%
   mutate(ndays=as.numeric(idt - first(idt)),
          ninf = 1:n())
-idt = idt[order(idt$ptid, idt$ndays),]
-
-enr = idt %>% 
-  filter(ndays==0) %>%
-  select(ptid, idt) %>%
-  rename(enrdt = idt)
+idt = idt[order(idt$pub_id, idt$ndays),]
 
 EFFECTIVE_CUTOFF = 700
 LLOQ="<<"
@@ -48,39 +52,36 @@ dbs_pilot = read.csv(dataDBS3, sep='\t')
 dbs = rbind(dbs, dbs_monitor, dbs_pilot)
 
 dbs = dbs %>% 
-  select("ptid","visitno","drawdt", "testdt", "concentration","concentration_units","analyte","lloq","concentration_oor_indicator") %>%
+  select("pub_id","visitno","drawdy", "concentration","concentration_units","analyte","lloq","concentration_oor_indicator") %>%
   filter(analyte=="TFV-DP")
 dbs$detectable = as.numeric(!is.na(dbs$concentration) & dbs$concentration_oor_indicator!=LLOQ)
 dbs$effective  = as.numeric(!is.na(dbs$concentration) & dbs$concentration >= EFFECTIVE_CUTOFF)
-dbs$drawdt = mdy(dbs$drawdt)
-dbs$testdt = mdy(dbs$testdt)
 dbs$conc = ifelse(is.na(dbs$concentration), 12.5, dbs$concentration)
 
 # check the number of primary 704 cases with dbs data 97 out of 98
-sum(unique(dbs$ptid) %in% case_ids)
-dbs = dbs %>% filter(ptid %in% case_ids)
+sum(unique(dbs$pub_id) %in% case_ids)
+dbs = dbs %>% filter(pub_id %in% case_ids)
 
 # merge with dx
 dbs = merge(dbs, dx, all.x=TRUE) %>%
-  merge(enr) %>%
-  merge(dat %>% select(ptid, tx, hiv1event)) %>%
-  mutate(ndays = as.numeric(drawdt - enrdt)) %>%
-  arrange(ptid, drawdt)
+  merge(dat %>% select(pub_id, tx, hiv1event)) %>%
+  mutate(ndays = drawdy) %>%
+  arrange(pub_id, ndays)
 
 dbs = dbs %>%
-  group_by(ptid) %>%
-  mutate(days2nearest_draw = min(abs(drawdt-dxdt))) %>%
+  group_by(pub_id) %>%
+  mutate(days2nearest_draw = min(abs(drawdy-dxdy))) %>%
   ungroup() %>%
-  arrange(ptid, ndays)
+  arrange(pub_id, ndays)
 
 # conveniently all cases with evidence of dbs use have a diagnosis date and draw date that coincide
 # which makes it simple to plot
 stopifnot(all((dbs %>% filter(days2nearest_draw !=0))$conc == 12.5))
-dbs$diagnosis_time = ifelse(dbs$drawdt==dbs$dxdt, 1, 0)
+dbs$diagnosis_time = ifelse(dbs$drawdy==dbs$dxdy, 1, 0)
 
 # most cases had no evidence of any use of PrEP
 dbs_summ = dbs %>%
-  group_by(ptid, tx) %>%
+  group_by(pub_id, tx) %>%
   summarise(any_use=any(!is.na(concentration)),
             .groups = 'drop')
 table(dbs_summ$any_use, dbs_summ$tx)
@@ -88,7 +89,7 @@ table(dbs_summ$any_use, dbs_summ$tx)
 # conveniently all cases with evidence of dbs use have a diagnosis date and draw date that coincide
 # which makes it simple to plot
 stopifnot(all((dbs %>% filter(days2nearest_draw !=0))$conc == 12.5))
-dbs$diagnosis_time = ifelse(dbs$drawdt==dbs$dxdt, 1, 0)
+dbs$diagnosis_time = ifelse(dbs$drawdy==dbs$dxdy, 1, 0)
 
 
 # for participants with no draw at diagnosis combine the last draw
@@ -96,41 +97,41 @@ dbs$diagnosis_time = ifelse(dbs$drawdt==dbs$dxdt, 1, 0)
 # this data will be used to draw dashed lines for these ppts
 dbs_nodraw = dbs %>%
   filter(days2nearest_draw != 0) %>%
-  group_by(ptid, tx) %>%
+  group_by(pub_id, tx) %>%
   summarise(
-    i = which.min(abs(drawdt-dxdt)),
-    ndays = (dxdt-enrdt)[i],
+    i = which.min(abs(drawdy-dxdy)),
+    ndays = dxdy[i],
     conc = conc[i],
     .groups = 'drop')
 dbs_last_draw = lapply(1:nrow(dbs_nodraw), function(row) {
-  id = dbs_nodraw$ptid[row]
+  id = dbs_nodraw$pub_id[row]
   i = dbs_nodraw$i[row]
   
   dbs %>%
-    filter(ptid==id) %>%
+    filter(pub_id==id) %>%
     mutate(row = row_number(),
            last_draw=TRUE) %>%
     filter(row == i) %>%
-    select(ptid, tx, ndays, conc, last_draw)
+    select(pub_id, tx, ndays, conc, last_draw)
 })
 dbs_last_draw = do.call(rbind, dbs_last_draw)
 dbs_nodraw = dbs_nodraw %>%
   mutate(last_draw=FALSE) %>%
   select(-i) %>%
   rbind(dbs_last_draw) %>%
-  arrange(ptid, ndays)
+  arrange(pub_id, ndays)
 
 # Calculate "step" values for each participant
 # where ppts with no detectible concentrations will have steps below 33 that
 # can be used to assign concentrations to a STEP value in the plot
 dbs_step = dbs %>%
-  group_by(ptid, tx, enrdt, dxdt) %>%
+  group_by(pub_id, tx, dxdy) %>%
   summarise(mconc = max(conc),
             max_days = max(ndays),
             any_use=any(!is.na(concentration)),
             .groups = 'drop') %>%
-  mutate( days2dx = as.numeric(dxdt - enrdt) ) %>%
-  group_by(ptid, tx, mconc, any_use, days2dx) %>%
+  mutate( days2dx = dxdy ) %>%
+  group_by(pub_id, tx, mconc, any_use, days2dx) %>%
   summarise(total_max_days = max(max_days, days2dx),
             .groups = 'drop') %>%
   arrange(-mconc, total_max_days) %>%
@@ -166,7 +167,7 @@ rm(NROW)
 
 dbs_nodraw$conc_step = ifelse( dbs_nodraw$conc > 12.5, dbs_nodraw$conc, STEP[dbs_nodraw$step])
 
-p = ggplot(dbs, aes(x = ndays/7, y = conc_step, group = ptid, fill = tx, color = tx)) +
+p = ggplot(dbs, aes(x = ndays/7, y = conc_step, group = pub_id, fill = tx, color = tx)) +
   geom_line(color = "grey70", alpha = 0.6) +
   geom_line(data=dbs_nodraw, color = "grey70", alpha = 0.6, linetype=3, alpha = 0.6) +
   geom_point(data = subset(dbs, diagnosis_time != 1), color = "gray70", size = 1, alpha = 0.6) +
@@ -198,7 +199,7 @@ p = ggplot(dbs, aes(x = ndays/7, y = conc_step, group = ptid, fill = tx, color =
 
 
 
-pdf('../output/figures/dbs_704primary_cases.pdf', width=11, height=8.5)
+pdf(pdfFileSave, width=11, height=8.5)
 print(p)
 dev.off()
 
@@ -214,18 +215,18 @@ trial = "HVTN 704"
 for( treatment in c("C3", "T1", "T2") ) {
   
   dat = dbs %>% 
-    filter(ptid %in% case_ids, drawdt <= dxdt, tx==treatment)
-  dat$days = as.numeric(dat$drawdt)
+    filter(pub_id %in% case_ids, drawdy <= dxdy, tx==treatment)
+  dat$days = dat$drawdy
   dat$visit = dat$visitno
   
   
   # generate df matrix (analogous to the 'df' matrix used in ../../code/dbs_prep_sampling.R) with
   # rows for ppts and columns for visits and entries are dates in number of days since the origin 
   # date 1 Jan 1970
-  df = reshape(dat[,c("ptid","days","visit")], v.names="days", idvar="ptid", timevar="visit", direction="wide")
-  rownames(df) = df$ptid
+  df = reshape(dat[,c("pub_id","days","visit")], v.names="days", idvar="pub_id", timevar="visit", direction="wide")
+  rownames(df) = df$pub_id
   colnames(df) = sub("days.","", colnames(df))
-  df$ptid = NULL
+  df$pub_id = NULL
   df = df[,order(as.numeric(colnames(df)))]
   df = as.matrix(df)
   
@@ -238,10 +239,10 @@ for( treatment in c("C3", "T1", "T2") ) {
   stopifnot(all(colnames(df)==colnames(Dij)))
   
   # Generate t0 list similar to T0 in the prep sampling simulations.  T0 is the site specific activation date for version 2
-  # of protocol.  Here just the first observed drawdat for each ptid as a number
-  t0 = lapply(as.numeric(rownames(df)), function(id) {
-    ss = dat %>% filter(ptid==id)
-    min(as.numeric(ss$drawdt))
+  # of protocol.  Here just the first observed drawdat for each pub_id as a number
+  t0 = lapply(rownames(df), function(id) {
+    ss = dat %>% filter(pub_id==id)
+    min(ss$drawdy)
   })
   
   
@@ -275,10 +276,10 @@ for( treatment in c("C3", "T1", "T2") ) {
   for( n in c("detectable","effective") ){
     dat$onprep = dat[[n]]
     
-    xij = reshape(dat[,c("ptid","onprep","visit")], v.names="onprep", idvar="ptid", timevar="visit", direction="wide")
-    rownames(xij) = xij$ptid
+    xij = reshape(dat[,c("pub_id","onprep","visit")], v.names="onprep", idvar="pub_id", timevar="visit", direction="wide")
+    rownames(xij) = xij$pub_id
     colnames(xij) = sub("onprep.","", colnames(xij))
-    xij$ptid = NULL
+    xij$pub_id = NULL
     xij = as.matrix(xij)
     xij = xij[,order(as.numeric(colnames(xij)))]
     stopifnot(all(rownames(df)==rownames(xij)))
@@ -337,7 +338,7 @@ for( treatment in c("C3", "T1", "T2") ) {
 
 out 
 
-write.csv(out, file='../output/tables/dbs_prep_use_estimates_704cases_week0to80.csv', row.names = FALSE)
+write.csv(out, file=tabFileSave, row.names = FALSE)
 
 q(save='no')
 

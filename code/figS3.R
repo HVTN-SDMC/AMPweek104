@@ -2,22 +2,31 @@ library(dplyr)
 library(ggplot2)
 library(grid)
 
+library(here)
+here::i_am("README.md")
+repoDir <- here::here()
+macroDir <- file.path(repoDir, "code/macro")
+datDir <- file.path(repoDir, "data")
+dat2Dir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data" # file.path(repoDir, "data")
+figDir <- file.path(repoDir, "output/figures")
+tabDir <- file.path(repoDir, "output/tables")
+
 # load macros
-source("macro/confbandsurv_2020Jan.R") 
+source(file.path(macroDir, "confbandsurv_2020Jan.R"))
 
 # input directory and file names
-adataFile1 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/amp_survival_postwk80.csv"
-adataFile2 <- "../data/amp_cir_pool_postwk80_trunc.csv"
-adataFile3 <- "../data/amp_cir_ind_postwk80_trunc.csv"
+adataFile1 <- file.path(dat2Dir, "amp_survival_postwk80.csv")
+adataFile2 <- file.path(datDir, "amp_cir_pool_postwk80_trunc.csv")
+adataFile3 <- file.path(datDir, "amp_cir_ind_postwk80_trunc.csv")
 
 # output directory and file names
-csvFileSave <- c("../output/tables/amp_confbandsurv_efficacy_pool_postwk80_trunc.csv",
-                 "../output/tables/amp_confbandsurv_efficacy_high_postwk80_trunc.csv",
-                 "../output/tables/amp_confbandsurv_efficacy_low_postwk80_trunc.csv")
+csvFileSave <- c(file.path(tabDir, "amp_confbandsurv_efficacy_pool_postwk80_trunc.csv"),
+                 file.path(tabDir, "amp_confbandsurv_efficacy_high_postwk80_trunc.csv"),
+                 file.path(tabDir, "amp_confbandsurv_efficacy_low_postwk80_trunc.csv"))
 
-pdfFileSave <- c("../output/figures/amp_efficacy_pool_postwk80_trunc_supp.pdf", 
-                 "../output/figures/amp_efficacy_high_postwk80_trunc_supp.pdf",
-                 "../output/figures/amp_efficacy_low_postwk80_trunc_supp.pdf")
+pdfFileSave <- c(file.path(figDir, "amp_efficacy_pool_postwk80_trunc_supp.pdf"), 
+                 file.path(figDir, "amp_efficacy_high_postwk80_trunc_supp.pdf"),
+                 file.path(figDir, "amp_efficacy_low_postwk80_trunc_supp.pdf"))
 
 # source input data and divide 'surv' into three datasets to obtain simultaneous
 # bounds for each of the comparisons of interest 

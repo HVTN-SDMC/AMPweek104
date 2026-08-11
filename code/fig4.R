@@ -2,18 +2,25 @@ library(dplyr)
 library(ggplot2)
 library(grid)
 
+library(here)
+here::i_am("README.md")
+repoDir <- here::here()
+datDir <- file.path(repoDir, "data")
+dat2Dir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data" # file.path(repoDir, "data")
+figDir <- file.path(repoDir, "output/figures")
+
+
 # input directory and file names
-SURV703 = '/Volumes/trials/vaccine/p703/analysis/efficacy/adata/v703_survival.csv'
-SURV704 = '/Volumes/trials/vaccine/p704/analysis/efficacy/adata/v704_survival.csv'
-adataFile2 <- "../data/v704_cuminc_wk104_pool.csv"
-adataFile3 <- "../data/v704_cuminc_wk104_ind.csv"
-adataFile4 <- "../data/v703_cuminc_wk104_pool.csv"
-adataFile5 <- "../data/v703_cuminc_wk104_ind.csv"
+SURV703 = file.path(dat2Dir, 'v703_survival.csv')
+SURV704 = file.path(dat2Dir, 'v704_survival.csv')
+adataFile2 <- file.path(datDir, "v704_cuminc_wk104_pool.csv")
+adataFile3 <- file.path(datDir, "v704_cuminc_wk104_ind.csv")
+adataFile4 <- file.path(datDir, "v703_cuminc_wk104_pool.csv")
+adataFile5 <- file.path(datDir, "v703_cuminc_wk104_ind.csv")
 
 # output directory and file names
-pdfDir <- ""
-pdfFileSave <- c("../output/figures/v704_cuminc_wk104_foot.pdf", 
-                 "../output/figures/v703_cuminc_wk104_foot.pdf")
+pdfFileSave <- c(file.path(figDir, "v704_cuminc_wk104_foot.pdf"), 
+                 file.path(figDir, "v703_cuminc_wk104_foot.pdf"))
 
 # source input data
 cuminc_pool_704 <- read.csv(adataFile2, stringsAsFactors = FALSE) %>%

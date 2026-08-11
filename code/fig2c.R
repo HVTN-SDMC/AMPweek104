@@ -2,14 +2,21 @@ library(dplyr)
 library(ggplot2)
 library(grid)
 
+library(here)
+here::i_am("README.md")
+repoDir <- here::here()
+datDir <- file.path(repoDir, "data")
+dat2Dir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data" # file.path(repoDir, "data")
+figDir <- file.path(repoDir, "output/figures")
+
 # input directory and file names
-adataFile3 <- "../data/amp_cir_wk104_pool_trunc.csv"
+adataFile <- file.path(datDir, "amp_cir_wk104_pool_trunc.csv")
 
 # output directory and file names
-pdfFileSave <- "../output/figures/amp_efficacy_wk104_pool_trunc.pdf"
+pdfFileSave <- file.path(figDir, "amp_efficacy_wk104_pool_trunc.pdf")
 
 cir_pool <- 
-  read.csv(adataFile3, stringsAsFactors = FALSE) 
+  read.csv(adataFile, stringsAsFactors = FALSE) 
 
 # reformat 'CIR' data for plotting, taking steps to ensure plots
 # end at tau (our censoring time point) rather than the last event time

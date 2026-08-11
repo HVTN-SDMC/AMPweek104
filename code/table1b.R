@@ -1,42 +1,47 @@
-# load macros
-source("macro/phReg.R") 
-source("macro/cuminc_functions.R")  
+library(here)
+here::i_am("README.md")
+repoDir <- here::here()
+macroDir <- file.path(repoDir, "code/macro")
+datDir <- file.path(repoDir, "data")
+dat2Dir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data" # file.path(repoDir, "data")
+figDir <- file.path(repoDir, "output/figures")
+tabDir <- file.path(repoDir, "output/tables")
 
-# data directory 
-dataDir <- ""
-tableDir <- ""
+# load macros
+source(file.path(macroDir, "phReg.R")) 
+source(file.path(macroDir, "cuminc_functions.R"))
 
 # input file name
-dataFile <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/amp_survival_postwk80.csv"
+dataFile <- file.path(dat2Dir, "amp_survival_postwk80.csv")
 
 # output file names
-CIR.csvFile_summary_703 <- "../output/tables/v703_cir_efficacy_postwk80_trunc.csv"
-CIR.csvFile_summary_704 <- "../output/tables/v704_cir_efficacy_postwk80_trunc.csv"
+CIR.csvFile_summary_703 <- file.path(tabDir, "v703_cir_efficacy_postwk80_trunc.csv")
+CIR.csvFile_summary_704 <- file.path(tabDir, "v704_cir_efficacy_postwk80_trunc.csv")
 
 # specify variables names from input dataset
 
-  # groupings to be compared
-  grpVar_pool  <- "rx_pool"
-  grpVar_ind <- "rx_code"
+# groupings to be compared
+grpVar_pool  <- "rx_pool"
+grpVar_ind <- "rx_code"
 
-  # follow-up time information
-  timeVar <- "fudays_postwk80"
-  
-  # event indicator
-  eventIndVar <- "status_postwk80"
+# follow-up time information
+timeVar <- "fudays_postwk80"
 
-  # unique identifier
-  idVar <- "ptid"
-  
-  # the strata variable
-  strataVar <- "rx_code"
-  
-  # reference level of your group variable
-  refLvl <- "C3"
+# event indicator
+eventIndVar <- "status_postwk80"
 
-  # comparison level of your group variable
-  cmpLvl_pool <- c("T1+T2")
-  cmpLvl_ind <- c("T1", "T2")
+# unique identifier
+idVar <- "pub_id"
+
+# the strata variable
+strataVar <- "rx_code"
+
+# reference level of your group variable
+refLvl <- "C3"
+
+# comparison level of your group variable
+cmpLvl_pool <- c("T1+T2")
+cmpLvl_ind <- c("T1", "T2")
 
 for( trial_name in c('v703', 'v704') ) {
 

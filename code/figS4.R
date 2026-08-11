@@ -4,12 +4,23 @@ library(grid)
 library(gridExtra)
 library(cowplot)
 
+library(here)
+here::i_am("README.md")
+repoDir <- here::here()
+macroDir <- file.path(repoDir, "code/macro")
+datDir <- file.path(repoDir, "data")
+dat2Dir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data" # file.path(repoDir, "data")
+figDir <- file.path(repoDir, "output/figures")
+tabDir <- file.path(repoDir, "output/tables")
+
 # Data files
-dataFile_postwk80 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/amp_survival_postwk80.csv"
-dataFile <- "/Volumes/trials/vaccine/p704/analysis/efficacy/adata/amp_survival.csv"
-data703cov <- '/Volumes/trials/vaccine/p703/analysis/dsmb/2020_08/closed/adata/subject_master.csv'
-data704cov <- '/Volumes/trials/vaccine/p704/analysis/dsmb/2020_08/closed/adata/subject_master.csv'
-dataWT <- "/Volumes/trials/vaccine/p704/analysis/efficacy/adata/amp_baseline_bodywt.csv"
+dataFile_postwk80 <- file.path(dat2Dir, "amp_survival_postwk80.csv")
+dataFile <- file.path(dat2Dir, "amp_survival.csv")
+data703cov <- file.path(dat2Dir, 'v703_subject_master.csv')
+data704cov <- file.path(dat2Dir, 'v704_subject_master.csv')
+dataWT <- file.path(dat2Dir, "amp_baseline_bodywt.csv")
+
+pdfFileSave = file.path(figDir, 'HIV_prognostic_factors_categorized_by_postwk80_cohort.pdf')
 
 # Post week 80 cohort
 dat_postwk80 = read.csv(dataFile_postwk80)
@@ -20,23 +31,20 @@ dat = dat %>% filter(efficacy_flag==1)
 
 # add cohort indicator to main data
 df = dat %>%
-  mutate(postwk80_cohort = ifelse(ptid %in% dat_postwk80$ptid, 1, 0),
-         ptid = as.numeric(gsub('-','',ptid)))
+  mutate(postwk80_cohort = ifelse(pub_id %in% dat_postwk80$pub_id, 1, 0))
 
 # get covariate info
 cov.703 = read.csv(data703cov)
 cov.704 = read.csv(data704cov)
 n = intersect(names(cov.703), names(cov.704))
 cov = rbind(cov.703[,n], cov.704[,n])
-cov = cov[,c("ptid","Protocol","country","age")]
-cov$ptid = as.numeric(gsub('-', '', cov$ptid))
+cov = cov[,c("pub_id","country","age")]
 cov$RSA = as.numeric(cov$country=='South Africa')
 cov$SA  = as.numeric(cov$country %in% c('Brazil','Peru'))
-cov$is704 = as.numeric(grepl('704', cov$Protocol))
 
 # get weight
 wt = read.csv(dataWT) %>%
-  select(ptid, visit, RIBwtkg)
+  select(pub_id, visit, RIBwtkg)
 
 df = df %>%
   merge(cov) %>%
@@ -250,7 +258,7 @@ final <- plot_grid(
   rel_heights = c(2, 1, 1, 0.2)
 )
 
-pdf('../output/figures/HIV_prognostic_factors_categorized_by_postwk80_cohort.pdf', width = 8.5, heigh=11)
+pdf(pdfFileSave, width = 8.5, heigh=11)
 print(final)
 dev.off()
 

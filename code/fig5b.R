@@ -1,11 +1,18 @@
 library(tidyverse)
 
+library(here)
+here::i_am("README.md")
+repoDir <- here::here()
+datDir <- file.path(repoDir, "data")
+figDir <- file.path(repoDir, "output/figures")
+tabDir <- file.path(repoDir, "output/tables")
+
 # generate a forest plot for the PE at week 104
-df = read.csv('../data/amp_cir_efficacy_postwk80_trunc.csv')
+df = read.csv(file.path(datDir, 'amp_cir_efficacy_postwk80_trunc.csv'))
 
 # output (note, TABLE data was added to plot in illustrator)
-PLOT = '../output/figures/AMP_week80to104_cir_forest_plot_trunc.pdf'
-TABLE = '../output/tables/AMP_week80to104_cir_forest_plot_trunc.csv'
+PLOT = file.path(figDir, 'AMP_week80to104_cir_forest_plot_trunc.pdf')
+TABLE = file.path(tabDir, 'AMP_week80to104_cir_forest_plot_trunc.csv')
 
 # Match the order of set and label to Corey et al. Fig. 1C
 df$label = factor(df$comparison,

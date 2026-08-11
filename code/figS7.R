@@ -5,18 +5,28 @@ library(gridExtra)
 library(lubridate)
 library(survival)
 
+library(here)
+here::i_am("README.md")
+repoDir <- here::here()
+macroDir <- file.path(repoDir, "code/macro")
+datDir <- file.path(repoDir, "data")
+dat2Dir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data" # file.path(repoDir, "data")
+figDir <- file.path(repoDir, "output/figures")
+tabDir <- file.path(repoDir, "output/tables")
+
 # input directory and file names
-adataFile1 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/adata/amp_survival.csv"
-adataFile2 <- "/Volumes/trials/vaccine/p704/analysis/efficacy/adata/v704_survival_wk104_neut.csv"
-adataFile3 <- "/Volumes/trials/vaccine/p703/analysis/efficacy/adata/v703_survival_wk104_neut.csv"
-nabFile704 <- "/Volumes/trials/vaccine/p704/s670/qdata/VTN704_breakthrough_NAb_20200910.txt"
-nabFile703 <- "/Volumes/trials/vaccine/p703/s573/qdata/VTN703_breakthrough_NAb_20200722.txt"
+# adataFile1 <- file.path(dat2Dir, "amp_survival.csv")
+adataFile2 <- file.path(dat2Dir, "v704_survival_wk104_neut.csv")
+adataFile3 <- file.path(dat2Dir, "v703_survival_wk104_neut.csv")
+nabFile704 <- file.path(dat2Dir, "VTN704_breakthrough_NAb_20200723.txt")
+nabFile703 <- file.path(dat2Dir, "VTN703_breakthrough_NAb_20200722.txt")
+
 
 # output directory and file names
-pdfFileSave <- "../output/figures/amp_ic80ls_over_time_wk104.pdf"
+pdfFileSave <- file.path(figDir, "amp_ic80ls_over_time_wk104.pdf")
 
 # source input data
-surv <- read.csv(adataFile1, stringsAsFactors = FALSE)
+# surv <- read.csv(adataFile1, stringsAsFactors = FALSE)
 survneut4 <- read.csv(adataFile2, stringsAsFactors = FALSE)
 survneut3 <- read.csv(adataFile3, stringsAsFactors = FALSE)
 nab4 <- read.csv(nabFile704, sep="\t")
@@ -24,27 +34,22 @@ nab3 <- read.csv(nabFile703, sep="\t")
 
 # calculate time from enrollment to IC80 sample draw date
 # and merge with IC80 value based on LS variant, primary endpoints only
-surv <- 
-  surv %>%
-  mutate(ptid=as.integer(gsub("-", "", ptid)))
 
 nab <-
   rbind(nab3, nab4) %>%
-  rename(guspec=isolate_specid, ptid=isolate_ptid, visitno=isolate_visitno, drawdt=isolate_drawdt) %>%
-  mutate(drawdt=dmy(drawdt)) %>%
-  arrange(ptid, drawdt) %>%
-  distinct(ptid, .keep_all=TRUE) %>%
-  select(ptid, drawdt)
+  rename(pub_id=isolate_pubid, visitno=isolate_visitno, drawdy=isolate_drawdt) %>%
+  arrange(pub_id, drawdy) %>%
+  distinct(pub_id, .keep_all=TRUE) %>%
+  select(pub_id, drawdy)
 
 dat <-
   bind_rows(survneut3, survneut4) %>%
   filter(hiv1event==1 & nisolates>0) %>%
   mutate(gmt80lsn=as.numeric(gsub(">", "", gmt80ls))) %>%
-  select(tx, ptid, gmt80ls, gmt80lsn) %>%
-  left_join(surv[,c("ptid", "enrdt")], by="ptid") %>%
-  mutate(enrdt=dmy(enrdt)) %>%
-  left_join(nab, by="ptid") %>%
-  mutate(fudays = as.numeric(drawdt-enrdt),
+  select(tx, pub_id, gmt80ls, gmt80lsn) %>%
+  left_join(nab, by="pub_id") %>%
+  mutate(#fudays = as.numeric(drawdt-enrdt),
+         fudays = drawdy,
          fuwks = fudays/7,
          tx=factor(tx, levels=c("T2", "T1", "C3")))
 
@@ -144,9 +149,9 @@ p2 <-
   ggplot(data=foot, aes(x=timeperiodX, y=gmt, ymin=lo.gmt, ymax=up.gmt, color=tx)) +
   geom_linerange(position=position_dodge(width=12)) + 
   geom_pointrange(position=position_dodge(width=12)) +
-  geom_text(aes(y=gmt, label=gmtlab), position=position_dodge(width=12), hjust=1.35, vjust=-0.5, size=3) +
-  geom_text(aes(y=lo.gmt, label=lo.gmtlab), position=position_dodge(width=12), hjust=1.25, size=3) +
-  geom_text(aes(y=up.gmt, label=up.gmtlab), position=position_dodge(width=12), hjust=1.25, vjust=-0.5, size=3) +
+  geom_text(aes(y=gmt, label=gmtlab), position=position_dodge(width=12), hjust=1.35, vjust=-0.5, size=3, show.legend = FALSE) +
+  geom_text(aes(y=lo.gmt, label=lo.gmtlab), position=position_dodge(width=12), hjust=1.25, size=3, show.legend = FALSE) +
+  geom_text(aes(y=up.gmt, label=up.gmtlab), position=position_dodge(width=12), hjust=1.25, vjust=-0.5, size=3, show.legend = FALSE) +
   scale_x_continuous(name="Weeks from Enrollment to IC80 Sample Collection Date",
                      limits=c(0, 120),
                      breaks = seq(16, 112, by=16) - 8,

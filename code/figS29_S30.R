@@ -1,19 +1,30 @@
 library(tidyverse)
 library(lubridate)
 
+library(here)
+here::i_am("README.md")
+repoDir <- here::here()
+datDir <- file.path(repoDir, "data")
+dat2Dir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data" # file.path(repoDir, "data")
+figDir <- file.path(repoDir, "output/figures")
+
+
 # dataFiles
-dataFile703 = '/Volumes/trials/vaccine/p703/analysis/efficacy/adata/v703_survival_wk104_neut.csv'
-dataFile704 = '/Volumes/trials/vaccine/p704/analysis/efficacy/adata/v704_survival_wk104_neut.csv'
-dataVL703 = '/Volumes/trials/vaccine/p704/analysis/efficacy/adata/v704_viral_loads.csv'
-dataVL704 = '/Volumes/trials/vaccine/p703/analysis/efficacy/adata/v703_viral_loads.csv'
-dataSurv = "/Volumes/trials/vaccine/p704/analysis/efficacy/code/masking/adata/amp_survival_postwk80.csv"
-dataSieve = '/Volumes/trials/vaccine/p704/analysis/sieve_postWk80/adata/d_wk80_wk104_survival_dataset_sieve.csv'
+dataFile703 = file.path(dat2Dir, 'v703_survival_wk104_neut.csv')
+dataFile704 = file.path(dat2Dir, 'v704_survival_wk104_neut.csv')
+dataVL703 = file.path(dat2Dir, 'v704_viral_loads.csv')
+dataVL704 = file.path(dat2Dir, 'v703_viral_loads.csv')
+dataSurv = file.path(dat2Dir, "amp_survival_postwk80.csv")
+dataSieve = file.path(dat2Dir, 'd_wk80_wk104_survival_dataset_sieve.csv')
+
+pdfFileSave = c(file.path(figDir, 'viral_load_plot_postwk80.pdf'),
+                file.path(figDir, 'viral_load_vs_IC80_postwk80.pdf'))
 
 dat.703 = read.csv(dataFile703)
 dat.704 = read.csv(dataFile704)
 dat.704$southAmerica = NULL
 dat = rbind(dat.703, dat.704)
-dat = subset(dat, select=c('protocol','ptid','tx','hiv1survday','hiv1event','gmt80ls','gmt80ms'))
+dat = subset(dat, select=c('protocol','pub_id','tx','hiv1survday','hiv1event','gmt80ls','gmt80ms'))
 dat$tx = factor(dat$tx, levels = c('C3', 'T1', 'T2'), labels=c('Control', '10 mg/kg', '30 mg/kg'))
 dat$gmt80ls = as.numeric(sub('>','',dat$gmt80ls))
 dat$gmt80ms = as.numeric(sub('>','',dat$gmt80ms))
@@ -37,10 +48,6 @@ vl = vl %>% mutate(
 stopifnot(all(!is.na(as.numeric(vl$vln))))
 vl$vln = as.numeric(vl$vln)
 
-# convert dates
-vl$drawdt = ymd(vl$drawdt)
-vl$dxdt = ymd(vl$dxdt)
-vl$artstartdt = ymd(vl$artstartdt)
 
 # remove negative results
 vl = vl %>%
@@ -48,11 +55,11 @@ vl = vl %>%
 
 # only consider viral loads prior to art start
 vl = vl %>% 
-  filter(is.na(artstartdt) | drawdt < artstartdt)
+  filter(is.na(artstartdy) | drawdy < artstartdy)
 
 # make sure data are ordered and take the first positive viral load
 vl = vl %>%
-  group_by(ptid) %>%
+  group_by(pub_id) %>%
   slice_head(n=1) %>%
   ungroup()
 
@@ -108,8 +115,7 @@ pdat %>% group_by(group, groupplot) %>% summarise(minIC80=min(IC80),
 
 # get post week 80 cases
 dat_postwk80 = read.csv(dataSurv)
-dat_postwk80$ptid = as.numeric(gsub('-','',dat_postwk80$ptid))
-pdat$status_postwk80 = ifelse(pdat$ptid %in% subset(dat_postwk80, status_postwk80==1)$ptid, 1, 0)
+pdat$status_postwk80 = ifelse(pdat$pub_id %in% subset(dat_postwk80, status_postwk80==1)$pub_id, 1, 0)
 table(pdat$status_postwk80, pdat$statuswk80)
 
 pdat = pdat %>% 
@@ -192,7 +198,7 @@ p2 = ggplot(data=pdat, aes(x=groupplot, y=vlplot, color=boxcol)) +
         axis.title.y = element_text(margin = margin(t = 0, r=-10, b = 0, l = 0)))
 
 
-pdf(file='../output/figures/viral_load_plot_postwk80.pdf', width=17, height=7)
+pdf(file=pdfFileSave[1], width=17, height=7)
 print(p2)
 dev.off()
 
@@ -231,7 +237,7 @@ p3 = ggplot(data=pdat, aes(x=gmt80ls, y=vlplot, shape=protocol, color=boxcol)) +
         axis.title.y = element_text(margin = margin(t = 0, r=-10, b = 0, l = 0))) +
   facet_wrap(~tx, nrow=1)
 
-pdf(file='../output/figures/viral_load_vs_IC80_postwk80.pdf', width=11, height=5)
+pdf(file=pdfFileSave[2], width=11, height=5)
 print(p3)
 dev.off()
 
