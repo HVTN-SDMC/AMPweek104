@@ -6,17 +6,17 @@ here::i_am("README.md")
 repoDir <- here::here()
 macroDir <- file.path(repoDir, "code/macro")
 datDir <- file.path(repoDir, "data")
-dat2Dir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data" # file.path(repoDir, "data")
+dat2Dir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data_final" # file.path(repoDir, "data")
 figDir <- file.path(repoDir, "output/figures")
 tabDir <- file.path(repoDir, "output/tables")
 
 # data files
 dataFile704 = file.path(dat2Dir, 'v704_survival_wk80_tau_neut.csv')
-dataDX = file.path(dat2Dir, 'amp_diagnostic_trajectories.csv')
+dataDX = file.path(dat2Dir, 'amp_diagnosis_day.csv')
 dataIDT704 = file.path(dat2Dir, 'v704_infusion_dates.csv')
-dataDBS1 = file.path(dat2Dir, 'VTN704_case_control_DBS01UC20200715E001.txt')
-dataDBS2 = file.path(dat2Dir, 'VTN704_DBS01_20210521.txt')
-dataDBS3 = file.path(dat2Dir, 'VTN704_DBS01_PILOT_UC_20181114.txt')
+dataDBS1 = file.path(dat2Dir, 'v704_DBS_case_control.csv')
+dataDBS2 = file.path(dat2Dir, 'v704_DBS_monitoring.csv')
+dataDBS3 = file.path(dat2Dir, 'v704_DBS_pilot.csv')
 
 pdfFileSave = file.path(figDir, 'dbs_704primary_cases.pdf')
 tabFileSave = file.path(tabDir, 'dbs_prep_use_estimates_704cases_week0to80.csv')
@@ -37,8 +37,8 @@ idt$inf.number = as.numeric(factor(idt$visit))
 # compute number of days between infusion and enrollment (ie, first infusion)
 idt = idt %>% 
   group_by(pub_id) %>% 
-  arrange(idt) %>%
-  mutate(ndays=as.numeric(idt - first(idt)),
+  arrange(idy) %>%
+  mutate(ndays=idy,
          ninf = 1:n())
 idt = idt[order(idt$pub_id, idt$ndays),]
 
@@ -46,9 +46,9 @@ EFFECTIVE_CUTOFF = 700
 LLOQ="<<"
 
 # Data split across three datasets (combine)
-dbs = read.csv(dataDBS1, sep='\t')
-dbs_monitor = read.csv(dataDBS2, sep='\t')
-dbs_pilot = read.csv(dataDBS3, sep='\t')
+dbs = read.csv(dataDBS1)
+dbs_monitor = read.csv(dataDBS2)
+dbs_pilot = read.csv(dataDBS3)
 dbs = rbind(dbs, dbs_monitor, dbs_pilot)
 
 dbs = dbs %>% 

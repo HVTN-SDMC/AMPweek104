@@ -5,17 +5,17 @@ library(here)
 here::i_am("README.md")
 repoDir <- here::here()
 datDir <- file.path(repoDir, "data")
-dat2Dir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data" # file.path(repoDir, "data")
+dat2Dir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data_final" # file.path(repoDir, "data")
 figDir <- file.path(repoDir, "output/figures")
 
 
 # dataFiles
 dataFile703 = file.path(dat2Dir, 'v703_survival_wk104_neut.csv')
 dataFile704 = file.path(dat2Dir, 'v704_survival_wk104_neut.csv')
-dataVL703 = file.path(dat2Dir, 'v704_viral_loads.csv')
-dataVL704 = file.path(dat2Dir, 'v703_viral_loads.csv')
+dataVL703 = file.path(dat2Dir, 'v703_viral_loads.csv')
+dataVL704 = file.path(dat2Dir, 'v704_viral_loads.csv')
 dataSurv = file.path(dat2Dir, "amp_survival_postwk80.csv")
-dataSieve = file.path(dat2Dir, 'd_wk80_wk104_survival_dataset_sieve.csv')
+dataSieve = file.path(dat2Dir, 'amp_sieve_marks_wk80to104.csv')
 
 pdfFileSave = c(file.path(figDir, 'viral_load_plot_postwk80.pdf'),
                 file.path(figDir, 'viral_load_vs_IC80_postwk80.pdf'))
@@ -24,16 +24,16 @@ dat.703 = read.csv(dataFile703)
 dat.704 = read.csv(dataFile704)
 dat.704$southAmerica = NULL
 dat = rbind(dat.703, dat.704)
-dat = subset(dat, select=c('protocol','pub_id','tx','hiv1survday','hiv1event','gmt80ls','gmt80ms'))
+dat = subset(dat, select=c('protocol','pub_id','tx','hiv1survday','hiv1event','gmt80ls'))
 dat$tx = factor(dat$tx, levels = c('C3', 'T1', 'T2'), labels=c('Control', '10 mg/kg', '30 mg/kg'))
 dat$gmt80ls = as.numeric(sub('>','',dat$gmt80ls))
-dat$gmt80ms = as.numeric(sub('>','',dat$gmt80ms))
 dat$least_sensitive = ifelse(dat$gmt80ls > 1, 'IC80ls > 1', 'IC80ls <= 1')
 
 # vl data does not include non-MITT either
 vl.704 = read.csv(dataVL703)
 vl.703 = read.csv(dataVL704)
 vl = rbind(vl.703, vl.704)
+vl = vl %>% select(pub_id, rx_code, vl, result, resultc, artstartdy, drawdy, statuswk80, protocol)
 
 # get numeric Viral loads converting < values to half the LLOQ (20, 40 or 43)
 # and 10,000,000 to 10,000,000

@@ -4,15 +4,15 @@ here::i_am("README.md")
 repoDir <- here::here()
 
 outDatDir <- file.path(repoDir, "data")
-datDir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data" # file.path(repoDir, "data")
+datDir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data_final" # file.path(repoDir, "data")
 macroDir <- file.path(repoDir, 'code/macro')
 
 # load macros
 source(file.path(macroDir, "cuminc_functions.R"))
 
 # input files
-dataFile <- file.path(datDir, "amp_survival_wk104_tau_neut_gpdx.csv")
-sDataFile <- file.path(datDir, 'amp_sieve_pooled_marks_final_v9_wk104_v2.csv')
+dataFile <- file.path(datDir, "amp_survival_wk104.csv")
+sDataFile <- file.path(datDir, 'amp_sieve_marks_wk104.csv')
 
 # output file names
 CIR_pool_80.csvFile <- file.path(outDatDir, "amp_cir_wk104_pool_cmpriskIC80ls_2cat_trunc.csv")
@@ -45,7 +45,7 @@ cmpLvl_ind <- c("T1", "T2")
 
 # read in time-to-event dataset and sieve data file
 dat <- read.csv( dataFile, stringsAsFactors = FALSE ) %>%
-  select(protocol, southAmerica, pub_id, tx, tx_pool, hiv1survday)
+  select(protocol, pub_id, tx, tx_pool, hiv1survday)
 sdat = read.csv( sDataFile ) %>%
   select(pub_id, hiv1event, gmt80ls) 
 

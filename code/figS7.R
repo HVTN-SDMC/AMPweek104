@@ -10,7 +10,7 @@ here::i_am("README.md")
 repoDir <- here::here()
 macroDir <- file.path(repoDir, "code/macro")
 datDir <- file.path(repoDir, "data")
-dat2Dir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data" # file.path(repoDir, "data")
+dat2Dir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data_final" # file.path(repoDir, "data")
 figDir <- file.path(repoDir, "output/figures")
 tabDir <- file.path(repoDir, "output/tables")
 
@@ -18,8 +18,8 @@ tabDir <- file.path(repoDir, "output/tables")
 # adataFile1 <- file.path(dat2Dir, "amp_survival.csv")
 adataFile2 <- file.path(dat2Dir, "v704_survival_wk104_neut.csv")
 adataFile3 <- file.path(dat2Dir, "v703_survival_wk104_neut.csv")
-nabFile704 <- file.path(dat2Dir, "VTN704_breakthrough_NAb_20200723.txt")
-nabFile703 <- file.path(dat2Dir, "VTN703_breakthrough_NAb_20200722.txt")
+nabFile704 <- file.path(dat2Dir, "v704_isolate_days.csv")
+nabFile703 <- file.path(dat2Dir, "v703_isolate_days.csv")
 
 
 # output directory and file names
@@ -29,15 +29,15 @@ pdfFileSave <- file.path(figDir, "amp_ic80ls_over_time_wk104.pdf")
 # surv <- read.csv(adataFile1, stringsAsFactors = FALSE)
 survneut4 <- read.csv(adataFile2, stringsAsFactors = FALSE)
 survneut3 <- read.csv(adataFile3, stringsAsFactors = FALSE)
-nab4 <- read.csv(nabFile704, sep="\t")
-nab3 <- read.csv(nabFile703, sep="\t")
+nab4 <- read.csv(nabFile704)
+nab3 <- read.csv(nabFile703)
 
 # calculate time from enrollment to IC80 sample draw date
 # and merge with IC80 value based on LS variant, primary endpoints only
 
 nab <-
   rbind(nab3, nab4) %>%
-  rename(pub_id=isolate_pubid, drawdy=isolate_drawdt) %>%
+  rename(pub_id=isolate_pubid, drawdy=isolate_drawdy) %>%
   arrange(pub_id, drawdy) %>%
   distinct(pub_id, .keep_all=TRUE) %>%
   select(pub_id, drawdy)

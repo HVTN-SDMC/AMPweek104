@@ -6,11 +6,11 @@ library(here)
 here::i_am("README.md")
 repoDir <- here::here()
 datDir <- file.path(repoDir, "data")
-dat2Dir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data" # file.path(repoDir, "data")
+dat2Dir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data_final" # file.path(repoDir, "data")
 figDir <- file.path(repoDir, "output/figures")
 
 # input directory and file names
-adataFile1 <- file.path(dat2Dir, "amp_survival_wk104_tau_neut_gpdx.csv")
+adataFile1 <- file.path(dat2Dir, "amp_survival_wk104.csv")
 adataFile3 <- file.path(datDir, "amp_cir_wk104_pool_cmpriskIC80ls_2cat_trunc.csv")
 
 # output directory and file names
