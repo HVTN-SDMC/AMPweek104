@@ -26,7 +26,7 @@ logit <- function(p){
   return(log(p/(1-p)))
 }
 
-dataWk80 <- read.csv(file.path(datDir, "amp_sieve_pooled_marks_final_v9c.csv")) %>%
+dataWk80 <- read.csv(file.path(datDir, "amp_sieve_marks_wk80.csv")) %>%
   # two 703 ppts with missing sequences have also a missing time-to-event
   filter(!is.na(hiv1fpday)) %>%
   # stratification variable 
@@ -44,7 +44,7 @@ dataWk80$epitope.dist.subtype.ls <- ifelse(dataWk80$protocol == "HVTN 703", data
                                                dataWk80$epitope.dist.b.ls)
 
 #week 80 - week 104
-dataPostWk80 <- read.csv(file.path(datDir, "d_wk80_wk104_survival_dataset_sieve.csv")) %>%
+dataPostWk80 <- read.csv(file.path(datDir, "amp_sieve_marks_wk80to104.csv")) %>%
   # two 703 ppts with missing sequences have also a missing time-to-event
   filter(!is.na(hiv1fpday)) %>%
   # stratification variable 

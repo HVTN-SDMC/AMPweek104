@@ -19,10 +19,10 @@ source(file.path(repoDir, "code/macro/lunnMcneil.R"))
 source(file.path(repoDir,"code/macro/forest.R"))
 
 
-dataPostWk80 <-  read.csv(file.path(datDir, "d_wk80_wk104_survival_dataset_sieve.csv"))
+dataPostWk80 <-  read.csv(file.path(datDir, "amp_sieve_marks_wk80to104.csv"))
 dataPostWk80.trial <- trial_dose_data (dataPostWk80, "704and703", dose = "T1+T2")
 
-dataWk80 <-  read.csv(file.path(datDir, "amp_sieve_pooled_marks_final_v9c.csv"))
+dataWk80 <-  read.csv(file.path(datDir, "amp_sieve_marks_wk80.csv"))
 dataWk80.trial <- trial_dose_data (dataWk80, "704and703", dose = "T1+T2")
 
 features.to.analyze.x <- "hxb2.230.pngs.ls"

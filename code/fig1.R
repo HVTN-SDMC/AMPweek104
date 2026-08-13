@@ -26,7 +26,7 @@ geometricMeanPT80 <- tibble("Protocol" = character(), "Follow-up" = character(),
 for(week in c(80, 104)){
   if(week == 104){
     #read in sieve mark file
-    sievedata <- read.csv(file.path(datDir, "amp_sieve_pooled_marks_final_v9_wk104_v2.csv")) %>%
+    sievedata <- read.csv(file.path(datDir, "amp_sieve_marks_wk104.csv")) %>%
       # two 703 ppts with missing sequences have also a missing time-to-event
       filter(!is.na(hiv1fpday)) %>%
       # stratification variable 
@@ -41,7 +41,7 @@ for(week in c(80, 104)){
    
   }else{
     #read in sieve mark file
-    sievedata <- read.csv(file.path(datDir, "amp_sieve_pooled_marks_final_v9c.csv")) %>%
+    sievedata <- read.csv(file.path(datDir, "amp_sieve_marks_wk80.csv")) %>%
       # two 703 ppts with missing sequences have also a missing time-to-event
       filter(!is.na(hiv1fpday)) %>%
       # stratification variable 

@@ -21,7 +21,7 @@ logit <- function(p){
 source(file.path(repoDir, "code/macro/plot.summary.sievePH.R"))
 source(file.path(repoDir, "code/macro/plot.summary.sievePH_wk80Wk104.R"))
 
-quantMarks <- c("parscore1.ls","parscore2.ls", "gmt80ls", "epitope.dist.any.ls", 
+quantMarks <- c("parscore1.ls","parscore2.ls", "gmt80ls", "epitope.dist.subtype.ls", 
           "hdist.zspace.sites.preselect.all.ls", 
           "hdist.zspace.sites.binding.all.ls")
 # parscore1.xx: logit predicted probability IC80 >= 1 ug/ml
@@ -43,13 +43,13 @@ markType <- rep(c("ProbResIC80", "IC80"), each=3)
 # plot labels
 VRC01lab <- c("VRC01")
 xLabels <- c(expression("Predicted Probability of" ~ IC[80] > 1 ~ mu * "g/ml"), expression("Predicted" ~ IC[80] ~ "(" * mu * "g/ml)"),
-            expression(IC[80] ~ "(" * mu * "g/ml)"), "VRC01 Epitope Distance to\n Subtype-Agnostic Reference", 
+            expression(IC[80] ~ "(" * mu * "g/ml)"), "VRC01 Epitope Distance to\n Subtype-Matched Reference", 
             "PC-Weighted Hamming Distance in\n27 Positions Predictive of Neutralization",
             "PC-Weighted Hamming Distance in\n50 VRC01 or CD4 Binding Positions")
 
 
 #week 80 
-dataWk80 <- read.csv(file.path(datDir, "amp_sieve_pooled_marks_final_v9c.csv")) %>%
+dataWk80 <- read.csv(file.path(datDir, "amp_sieve_marks_wk80.csv")) %>%
   # two 703 ppts with missing sequences have also a missing time-to-event
   filter(!is.na(hiv1fpday)) %>%
   # stratification variable 
@@ -63,12 +63,13 @@ dataWk80$gmt80ls[dataWk80$gmt80ls == ">100"] <- "100"
 dataWk80$gmt80ls <- as.numeric(dataWk80$gmt80ls)
 #log10 transformation 
 dataWk80$gmt80ls <- log10(dataWk80$gmt80ls)
+dataWk80$epitope.dist.subtype.ls <- ifelse(dataWk80$protocol == "HVTN 703", dataWk80$epitope.dist.c.ls, dataWk80$epitope.dist.b.ls)
 
 
 
 
 #week 80 - week 104
-dataPostWk80 <- read.csv(file.path(datDir, "d_wk80_wk104_survival_dataset_sieve.csv")) %>%
+dataPostWk80 <- read.csv(file.path(datDir, "amp_sieve_marks_wk80to104.csv")) %>%
   # two 703 ppts with missing sequences have also a missing time-to-event
   filter(!is.na(hiv1fpday)) %>%
   # stratification variable 
@@ -80,42 +81,14 @@ dataPostWk80 <- read.csv(file.path(datDir, "d_wk80_wk104_survival_dataset_sieve.
 #pre-process gmt80ls
 dataPostWk80$gmt80ls[dataPostWk80$gmt80ls == ">100"] <- "100"
 dataPostWk80$gmt80ls <- as.numeric(dataPostWk80$gmt80ls)
-#log10 transformation 
 dataPostWk80$gmt80ls <- log10(dataPostWk80$gmt80ls)
-#PubIDs for the VRC01 participants in figure 6B with IC80 = 100 and the placebo recipient with an IC80 ~7
 dataPostWk80$pub_id[!is.na(dataPostWk80$gmt80ls) & dataPostWk80$gmt80ls == log10(100) & dataPostWk80$tx != "C3"]
 dataPostWk80$pub_id[!is.na(dataPostWk80$gmt80ls) & dataPostWk80$gmt80ls > log10(5) & dataPostWk80$tx == "C3"]
-
-#identify eight total isolates (one sensitive and one resistant for each subgroup) across the following categories, seperately for 703 and 704:
-#Weeks 0–80, Placebo
-#Weeks 0–80, VRC01 recipients
-#Weeks 80–104, Placebo
-#Weeks 80–104, VRC01 recipients
-
-# obtain subset with just ic80 and rank the isolates by IC80, then identify the most resistant and most sensitive isolates in each subgroup
-df <- dataWk80 %>%
-  filter(!is.na(gmt80ls)) %>%
-  dplyr::select(pub_id, protocol, tx, gmt80ls)
-df$gmt80ls <- 10^df$gmt80ls
-
-selectedPUBIDs_wk80 <- c("704-1535", "703-0537", "704-1747", "703-0520", "704-3008", "703-0566", 
-                    "704-1328", "703-1034")
-df <- filter(df, pub_id %in% selectedPUBIDs_wk80)
-df$phenotype <- ifelse(df$gmt80ls > 2, "resistant", "sensitive")
-write.csv(df, file.path(tabDir, "selectedIsolates_wk80.csv"), row.names = FALSE)
-
-df <- dataPostWk80 %>%
-  filter(!is.na(gmt80ls)) %>%
-  dplyr::select(pub_id, protocol, tx, gmt80ls)
-df$gmt80ls <- 10^df$gmt80ls
-selectedPUBIDs_postWk80 <- c("704-2448", "704-0011", "703-1764", "703-1758", "704-2838", "703-1453", "704-1528", "703-2018")
-df <- filter(df, pub_id %in% selectedPUBIDs_postWk80)
-df$phenotype <- ifelse(df$gmt80ls > 2, "resistant", "sensitive")
-write.csv(df, file.path(tabDir, "selectedIsolates_postWk80.csv"), row.names = FALSE)
+dataPostWk80$epitope.dist.subtype.ls <- ifelse(dataPostWk80$protocol == "HVTN 703", dataPostWk80$epitope.dist.c.ls, dataPostWk80$epitope.dist.b.ls)
 
 
 #week 104
-dataWk104 <- read.csv(file.path(datDir, "amp_sieve_pooled_marks_final_v9_wk104_v2.csv")) %>%
+dataWk104 <- read.csv(file.path(datDir, "amp_sieve_marks_wk104.csv")) %>%
   # two 703 ppts with missing sequences have also a missing time-to-event
   filter(!is.na(hiv1fpday)) %>%
   # stratification variable 

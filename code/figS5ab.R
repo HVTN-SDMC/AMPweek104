@@ -21,7 +21,7 @@ source(file.path(repoDir, "code/macro/plot.summary.sievePH.R"))
 source(file.path(repoDir, "code/macro/plot.summary.sievePH_wk80Wk104.R"))
 
 #week 80 
-dataWk80 <- read.csv(file.path(datDir, "amp_sieve_pooled_marks_final_v9c.csv")) %>%
+dataWk80 <- read.csv(file.path(datDir, "amp_sieve_marks_wk80.csv")) %>%
   # two 703 ppts with missing sequences have also a missing time-to-event
   filter(!is.na(hiv1fpday)) %>%
   # stratification variable 
@@ -38,7 +38,7 @@ dataWk80$gmt50ls <- log10(dataWk80$gmt50ls)
 
 
 #week 80 - week 104
-dataPostWk80 <- read.csv(file.path(datDir,  "d_wk80_wk104_survival_dataset_sieve.csv")) %>%
+dataPostWk80 <- read.csv(file.path(datDir,  "amp_sieve_marks_wk80to104.csv")) %>%
   # two 703 ppts with missing sequences have also a missing time-to-event
   filter(!is.na(hiv1fpday)) %>%
   # stratification variable 
@@ -58,7 +58,7 @@ dataPostWk80$pub_id[!is.na(dataPostWk80$gmt50ls) & dataPostWk80$gmt50ls > log10(
 
 
 #week 104
-dataWk104 <- read.csv(file.path(datDir, "amp_sieve_pooled_marks_final_v9_wk104_v2.csv")) %>%
+dataWk104 <- read.csv(file.path(datDir, "amp_sieve_marks_wk104.csv")) %>%
   # two 703 ppts with missing sequences have also a missing time-to-event
   filter(!is.na(hiv1fpday)) %>%
   # stratification variable 
