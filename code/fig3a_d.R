@@ -2,6 +2,13 @@ library(tidyverse)
 library(ggplot2)
 library(gridExtra)
 
+library(here)
+here::i_am("README.md")
+repoDir <- here::here()
+figDir <- file.path(repoDir, "output/figures")
+
+pdfFileSave = file.path(figDir, "amp_efficacy_models.pdf")
+
 q = 0.7
 p = 0.25
 lambda = 0.03/365
@@ -303,10 +310,16 @@ df = data.frame(
 qD = make_pe_ci_plot(df)
 
 # Arrange figure
-grid.arrange(pA+ylab(NULL), pB+ylab(NULL), pC+ylab(NULL), pD+ylab(NULL), 
-             qA+xlab(NULL), qB+xlab(NULL), qC+xlab(NULL), qD+xlab(NULL), 
-             nrow=2,
-             heights = unit(c(2,1), "null"))
+# grid.arrange(pA+ylab(NULL), pB+ylab(NULL), pC+ylab(NULL), pD+ylab(NULL), 
+#             qA+xlab(NULL), qB+xlab(NULL), qC+xlab(NULL), qD+xlab(NULL), 
+#             nrow=2,
+#             heights = unit(c(2,1), "null"))
+
+pdf(file=pdfFileSave, width=8, height=4)
+grid.arrange(pA+ylab(NULL), pB+ylab(NULL), pC+ylab(NULL), pD+ylab(NULL),
+             nrow=1,
+             heights = unit(c(1), "null"))
+dev.off()
 
 
 
