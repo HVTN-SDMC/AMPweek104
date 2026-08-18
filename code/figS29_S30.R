@@ -5,17 +5,16 @@ library(here)
 here::i_am("README.md")
 repoDir <- here::here()
 datDir <- file.path(repoDir, "data")
-dat2Dir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data_final" # file.path(repoDir, "data")
 figDir <- file.path(repoDir, "output/figures")
 
 
 # dataFiles
-dataFile703 = file.path(dat2Dir, 'v703_survival_wk104_neut.csv')
-dataFile704 = file.path(dat2Dir, 'v704_survival_wk104_neut.csv')
-dataVL703 = file.path(dat2Dir, 'v703_viral_loads.csv')
-dataVL704 = file.path(dat2Dir, 'v704_viral_loads.csv')
-dataSurv = file.path(dat2Dir, "amp_survival_postwk80.csv")
-dataSieve = file.path(dat2Dir, 'amp_sieve_marks_wk80to104.csv')
+dataFile703 = file.path(datDir, 'v703_survival_wk104_neut.csv')
+dataFile704 = file.path(datDir, 'v704_survival_wk104_neut.csv')
+dataVL703 = file.path(datDir, 'v703_viral_loads.csv')
+dataVL704 = file.path(datDir, 'v704_viral_loads.csv')
+dataSurv = file.path(datDir, "amp_survival_postwk80.csv")
+dataSieve = file.path(datDir, 'amp_sieve_marks_wk80to104.csv')
 
 pdfFileSave = c(file.path(figDir, 'viral_load_plot_postwk80.pdf'),
                 file.path(figDir, 'viral_load_vs_IC80_postwk80.pdf'))

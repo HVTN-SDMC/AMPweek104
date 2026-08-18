@@ -3,7 +3,6 @@ here::i_am("README.md")
 repoDir <- here::here()
 macroDir <- file.path(repoDir, "code/macro")
 datDir <- file.path(repoDir, "data")
-dat2Dir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data_final" # file.path(repoDir, "data")
 figDir <- file.path(repoDir, "output/figures")
 tabDir <- file.path(repoDir, "output/tables")
 
@@ -12,7 +11,7 @@ source(file.path(macroDir, "phReg.R"))
 source(file.path(macroDir, "cuminc_functions.R"))
 
 # input file name
-dataFile <- file.path(dat2Dir, "amp_survival.csv")
+dataFile <- file.path(datDir, "amp_survival.csv")
 
 # output file names
 CIR.csvFile_summary_trunc <- file.path(tabDir, "amp_cir_efficacy_wk104_trunc.csv")

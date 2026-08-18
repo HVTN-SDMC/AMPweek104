@@ -6,7 +6,6 @@ library(here)
 here::i_am("README.md")
 repoDir <- here::here()
 datDir <- file.path(repoDir, "data")
-dat2Dir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data_final" # file.path(repoDir, "data")
 figDir <- file.path(repoDir, "output/figures")
 
 # input directory and file names

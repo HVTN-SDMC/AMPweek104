@@ -4,7 +4,7 @@ here::i_am("README.md")
 repoDir <- here::here()
 
 outDatDir <- file.path(repoDir, "data")
-datDir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data_final" # file.path(repoDir, "data")
+datDir <- file.path(repoDir, "data")
 macroDir <- file.path(repoDir, 'code/macro')
 
 # load macros

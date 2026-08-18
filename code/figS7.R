@@ -10,16 +10,14 @@ here::i_am("README.md")
 repoDir <- here::here()
 macroDir <- file.path(repoDir, "code/macro")
 datDir <- file.path(repoDir, "data")
-dat2Dir <- "/Volumes/trials/vaccine/p704/analysis/public_use_data/postwk80/public_use_data_final" # file.path(repoDir, "data")
 figDir <- file.path(repoDir, "output/figures")
 tabDir <- file.path(repoDir, "output/tables")
 
 # input directory and file names
-# adataFile1 <- file.path(dat2Dir, "amp_survival.csv")
-adataFile2 <- file.path(dat2Dir, "v704_survival_wk104_neut.csv")
-adataFile3 <- file.path(dat2Dir, "v703_survival_wk104_neut.csv")
-nabFile704 <- file.path(dat2Dir, "v704_isolate_days.csv")
-nabFile703 <- file.path(dat2Dir, "v703_isolate_days.csv")
+adataFile2 <- file.path(datDir, "v704_survival_wk104_neut.csv")
+adataFile3 <- file.path(datDir, "v703_survival_wk104_neut.csv")
+nabFile704 <- file.path(datDir, "v704_isolate_days.csv")
+nabFile703 <- file.path(datDir, "v703_isolate_days.csv")
 
 
 # output directory and file names
