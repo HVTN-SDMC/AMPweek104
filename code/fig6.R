@@ -16,7 +16,7 @@ logit <- function(p){
   return(log(p/(1-p)))
 }
 
-
+set.seed(1)
 dataWk104 <- read.csv(file.path(datDir, "amp_sieve_marks_wk104.csv")) %>%
   # two 703 ppts with missing sequences have also a missing time-to-event
   filter(!is.na(hiv1fpday)) %>%

@@ -335,12 +335,6 @@ xtickLab = c(0.07, 0.3, 1, 3, 5, 10, 25, 50, 100)
 xtickAt = log10(xtickLab)
 xlim = c(min(markRng[1]) , markRng[2])
 
-p <- ggplotSievePH(sfit, data1 = dataWk80Sub, data2 = dataPostWk80Sub,  
-                   xlab=expression(IC[80] ~ "(" * mu * "g/ml)"),
-                   breaks.x = xtickAt, labels.x = xtickLab, title="")
-
-ggsave(file.path(figDir, paste0("703and704_sievePH_PEbyIC80_ls_VRC01_placebo_Wk80PostWk80nonparametric", ifelse(defaultbandwidth, "_dbw",""), ".pdf")),
-       plot=p, width=1 * 7, height=0.9 * 8)
 
 #plot Wk80 and Wk104 together
 sfitWk80$cohort <- "Week 80"
@@ -358,21 +352,8 @@ ggsave(file.path(figDir, paste0("703and704_sievePH_PEbyIC80_ls_VRC01_placebo_Wk8
 
 
 
-#plot Wk80, Wk104, postWk80 seperately
-sfitWk80 <- summary(fitWk80, sieveAlternative = "oneSided")
-sfitWk104 <- summary(fitWk104, sieveAlternative = "oneSided")
+#plot postWk80 seperately
 sfitPostWk80 <- summary(fitPostWk80, sieveAlternative = "oneSided")
-
-pWk104 <- ggplotSievePH_onecohort (sfitWk104, dataWk104Sub[, c("treatment", "mark", "tx")],
-                          xlab=expression(IC[80] ~ "(" * mu * "g/ml)"),
-                          breaks.x = xtickAt, labels.x = xtickLab, title="")
-
-
-ggsave(file.path(figDir, paste0("703and704_sievePH_PEbyIC80_ls_VRC01_placebo_Wk104nonparametric", ifelse(defaultbandwidth, "_dbw",""), ".pdf")),
-       plot=pWk104, width=1 * 7, height=0.9 * 8)
-
-
-
 pPostWk80 <- ggplotSievePH_onecohort (sfitPostWk80, dataPostWk80Sub[, c("treatment", "mark", "tx")],
                                    xlab=expression(IC[80] ~ "(" * mu * "g/ml)"),
                                    breaks.x = xtickAt, labels.x = xtickLab, title="", color_line = "darkgreen",
