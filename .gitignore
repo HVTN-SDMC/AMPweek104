@@ -4,6 +4,8 @@
 .Ruserdata
 private_notes.md
 
+code/amp_incidence_rates_wk104_tau_neut_cmprsk_2cat.R
+
 data/*
 !data/.gitkeep
 
