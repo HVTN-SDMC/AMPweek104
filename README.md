@@ -29,13 +29,17 @@ https://doi.org/10.7910/DVN/WEJPUF
 
 To reproduce the analyses in this repository:
 
-* Download all data files from the Dataverse repository at the DOI above.
+* Download all data files from the Dataverse repository at the DOI above, 
+  selecting "Original Format" rather than the default "Tab-Separated Values" 
+  option. Dataverse converts files to `.tab` by default, but the analysis 
+  scripts expect `.csv` files as originally uploaded.
 * Place the downloaded files into the `data/` directory of this repository.
 * File names should match those referenced in the analysis scripts (see `code/`).
 
 Data are made available under the terms specified on the Dataverse page. Please 
 refer to the Dataverse listing for the data use agreement, citation requirements, 
 and any access restrictions that may apply.
+
 
 ## 3. Generating derived datasets
 
