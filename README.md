@@ -52,4 +52,25 @@ back into the `data/` directory:
 * `code/mk_data6.R`
 * `code/mk_data7.R`
 
+## 4. Running the analyses
+
+Once the derived datasets have been generated (see Section 3), each figure 
+and table in the manuscript can be reproduced by running its corresponding 
+script in `code/`. Scripts are named according to the figure or table they 
+produce:
+
+* `figX.R` / `tableX.R` — main text figures and tables, where `X` is the 
+  figure or table number (e.g. `fig4.R`, `table1a.R`).
+* `figSX.R` / `tableSX.R` — supplemental figures and tables, using the same 
+  numbering convention (e.g. `figS7.R`, `figS29_S30.R`).
+* Suffixes such as `a`, `b`, `c` indicate a sub-panel of a figure or a subset 
+  of a table (e.g. `fig2ab.R` produces panels 2a and 2b; `table1a.R` through 
+  `table1h.R` each produce a portion of Table 1).
+
+Each script can be run independently — there is no required order — and 
+saves its output to `output/figures/` or `output/tables/`. Note that the 
+output file name does not always match the script's file name; consult the 
+script itself (e.g. the file name(s) passed to `ggsave()`, `write.csv()`, 
+or similar output functions) to identify the corresponding output file.
+
 
